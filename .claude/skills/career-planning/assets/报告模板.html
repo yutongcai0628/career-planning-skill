@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>职业规划报告 · {{NAME}}</title>
+<!--
+  使用说明（给填充这个模板的 AI 看，不要保留在最终文件里）：
+  1. 替换 {{NAME}} {{DATE}} {{TAGLINE}}。
+  2. 把 <!-- CONTENT --> 区域换成报告正文，照下面给的 section / callout / chart-card 结构写。
+  3. 图表：把生成好的 <svg ...>...</svg> 直接粘进 .chart-card 里（SVG 自带宽高即可，去掉对 CSS 变量的依赖、改成下面注释里的固定色，否则在独立 HTML 里会变黑/透明）。
+  4. 输出文件存到 职业档案/报告/ 下，文件名如「职业规划报告-姓名-日期.html」。
+-->
+<style>
+  :root{
+    --ink:#1b1b2b; --muted:#5b5b6e; --faint:#8a8a9a;
+    --accent:#4338ca; --accent-soft:#eef0fb; --accent-ink:#312e81;
+    --line:#e7e7ee; --bg:#fbfbfd; --card:#ffffff;
+    --ok:#0f766e; --warn:#b45309; --bad:#b91c1c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
+    line-height:1.75; font-size:16px; -webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:840px; margin:0 auto; padding:0 28px 80px;}
+  /* 封面 */
+  .cover{
+    padding:64px 0 40px; border-bottom:1px solid var(--line); margin-bottom:44px;
+  }
+  .cover .kicker{
+    letter-spacing:.28em; font-size:12px; color:var(--accent); font-weight:600;
+    text-transform:uppercase; margin-bottom:18px;
+  }
+  .cover h1{
+    font-size:38px; line-height:1.25; margin:0 0 14px; font-weight:700; letter-spacing:-.01em;
+  }
+  .cover .tagline{font-size:18px; color:var(--muted); margin:0 0 28px; font-weight:400;}
+  .cover .meta{display:flex; gap:26px; font-size:14px; color:var(--faint); flex-wrap:wrap;}
+  .cover .meta b{color:var(--ink); font-weight:600;}
+  /* 章节 */
+  section{margin:0 0 40px;}
+  section > h2{
+    font-size:22px; font-weight:700; margin:0 0 18px; padding-left:16px;
+    position:relative; letter-spacing:-.01em;
+  }
+  section > h2::before{
+    content:""; position:absolute; left:0; top:4px; bottom:4px; width:5px;
+    border-radius:3px; background:var(--accent);
+  }
+  p{margin:0 0 14px;}
+  strong{font-weight:650;}
+  .lead{font-size:17px;}
+  /* 高亮 callout */
+  .callout{
+    background:var(--accent-soft); border:1px solid #dfe2f7; border-radius:14px;
+    padding:18px 22px; margin:18px 0; color:var(--accent-ink);
+  }
+  .callout .label{font-weight:700; font-size:13px; letter-spacing:.04em; margin-bottom:6px;}
+  /* 图表卡片 */
+  .chart-card{
+    background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:22px; margin:22px 0; box-shadow:0 1px 3px rgba(20,20,40,.04);
+    text-align:center;
+  }
+  .chart-card svg{max-width:100%; height:auto;}
+  .chart-card .cap{font-size:13px; color:var(--faint); margin-top:12px;}
+  /* 行动清单 */
+  ol.actions{padding-left:0; counter-reset:a; list-style:none; margin:8px 0;}
+  ol.actions li{
+    counter-increment:a; position:relative; padding:12px 0 12px 44px;
+    border-bottom:1px dashed var(--line);
+  }
+  ol.actions li::before{
+    content:counter(a); position:absolute; left:0; top:11px;
+    width:28px; height:28px; border-radius:50%; background:var(--accent-soft);
+    color:var(--accent); font-weight:700; font-size:14px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  /* 页脚 */
+  .foot{
+    margin-top:48px; padding-top:20px; border-top:1px solid var(--line);
+    font-size:12.5px; color:var(--faint); text-align:center;
+  }
+  /* 打印成 PDF 时更干净 */
+  @media print{
+    body{background:#fff;}
+    .page{max-width:none; padding:0 12mm;}
+    .chart-card,.callout{break-inside:avoid;}
+    section{break-inside:avoid-page;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="cover">
+    <div class="kicker">Career Planning Report · 职业规划报告</div>
+    <h1>{{TAGLINE}}</h1>
+    <p class="tagline">一份为你量身定制的职业规划与决策分析</p>
+    <div class="meta">
+      <span>规划对象 · <b>{{NAME}}</b></span>
+      <span>生成日期 · <b>{{DATE}}</b></span>
+      <span>by 职业规划导师 skill</span>
+    </div>
+  </header>
+
+  <!-- CONTENT —— 下面是结构示例，填充时按这个写：
+
+  <section>
+    <h2>一、我对你的判断</h2>
+    <p class="lead">……把关键判断写在这里……</p>
+    <div class="callout">
+      <div class="label">核心洞察</div>
+      一句最关键的话。
+    </div>
+  </section>
+
+  <section>
+    <h2>二、核心分析</h2>
+    <p>……</p>
+    <div class="chart-card">
+      （把生成的 SVG 粘到这里）
+      <div class="cap">图：你的能力甜区</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>三、我的建议</h2>
+    <p>……</p>
+  </section>
+
+  <section>
+    <h2>四、接下来 30 / 90 天</h2>
+    <ol class="actions">
+      <li>第一件可执行的事</li>
+      <li>第二件</li>
+    </ol>
+  </section>
+
+  -->
+
+  <div class="foot">本报告由「职业规划导师」skill 生成 · 仅供参考，最终决定权始终在你手上</div>
+</div>
+</body>
+</html>
