@@ -7,3 +7,8 @@
 
 # 系统文件
 .DS_Store
+**/.DS_Store
+
+# 本地发布包（请用干净目录或 git archive 生成）
+*.zip
+*.tar.gz

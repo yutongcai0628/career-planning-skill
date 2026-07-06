@@ -6,142 +6,290 @@
 <title>职业规划报告 · {{NAME}}</title>
 <!--
   使用说明（给填充这个模板的 AI 看，不要保留在最终文件里）：
-  1. 替换 {{NAME}} {{DATE}} {{TAGLINE}}。
-  2. 把 <!-- CONTENT --> 区域换成报告正文，照下面给的 section / callout / chart-card 结构写。
-  3. 图表：把生成好的 <svg ...>...</svg> 直接粘进 .chart-card 里（SVG 自带宽高即可，去掉对 CSS 变量的依赖、改成下面注释里的固定色，否则在独立 HTML 里会变黑/透明）。
-  4. 输出文件存到 职业档案/报告/ 下，文件名如「职业规划报告-姓名-日期.html」。
+  1. 替换 {{NAME}} {{DATE}} {{TAGLINE}} {{CONTENT}}。
+  2. 用户粘贴的 JD、履历、聊天原文必须先 HTML escape，不能保留 script/iframe/on* 事件属性或外链脚本。
+  3. 图表：优先使用模板里的 section / callout / insight-grid / chart-card / whiteboard / matrix / timeline / risk-strip / ol.actions 结构。
+  4. SVG 图表必须是安全内联 SVG；独立 HTML 里要把 CSS 变量换成固定色。
+  5. 输出文件存到 职业档案/报告/ 下，文件名如「职业规划报告-姓名-日期.html」。
 -->
 <style>
   :root{
-    --ink:#1b1b2b; --muted:#5b5b6e; --faint:#8a8a9a;
-    --accent:#4338ca; --accent-soft:#eef0fb; --accent-ink:#312e81;
-    --line:#e7e7ee; --bg:#fbfbfd; --card:#ffffff;
+    --ink:#17202a; --muted:#566170; --faint:#8b94a3;
+    --paper:#f8fafc; --panel:#ffffff; --soft:#eef3f7;
+    --indigo:#29306d; --teal:#1f766f; --amber:#c6842e; --rose:#9f4f5f;
+    --line:#dde3eb; --line-strong:#b8c1cf;
     --ok:#0f766e; --warn:#b45309; --bad:#b91c1c;
+    --shadow:0 20px 60px rgba(23,32,42,.10);
   }
   *{box-sizing:border-box;}
+  html{background:#eef2f7;}
   body{
-    margin:0; background:var(--bg); color:var(--ink);
+    margin:0; color:var(--ink); background:
+      linear-gradient(180deg,#f5f8fb 0,#ffffff 330px,#edf3f7 100%);
     font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
-    line-height:1.75; font-size:16px; -webkit-font-smoothing:antialiased;
+    line-height:1.72; font-size:16px; -webkit-font-smoothing:antialiased;
   }
-  .page{max-width:840px; margin:0 auto; padding:0 28px 80px;}
-  /* 封面 */
-  .cover{
-    padding:64px 0 40px; border-bottom:1px solid var(--line); margin-bottom:44px;
+  .page{max-width:1040px; margin:0 auto; padding:28px 28px 84px;}
+  .report-shell{
+    background:rgba(255,255,255,.82); border:1px solid rgba(184,193,207,.72);
+    box-shadow:var(--shadow); overflow:hidden;
   }
-  .cover .kicker{
-    letter-spacing:.28em; font-size:12px; color:var(--accent); font-weight:600;
-    text-transform:uppercase; margin-bottom:18px;
+  .report-header{
+    position:relative; padding:34px 46px 30px; background:#fff; border-bottom:1px solid var(--line);
   }
-  .cover h1{
-    font-size:38px; line-height:1.25; margin:0 0 14px; font-weight:700; letter-spacing:-.01em;
+  .report-header::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:
+      linear-gradient(90deg,rgba(41,48,109,.08) 1px,transparent 1px),
+      linear-gradient(0deg,rgba(31,118,111,.06) 1px,transparent 1px);
+    background-size:34px 34px; -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.16),transparent 78%); mask-image:linear-gradient(180deg,rgba(0,0,0,.16),transparent 78%);
   }
-  .cover .tagline{font-size:18px; color:var(--muted); margin:0 0 28px; font-weight:400;}
-  .cover .meta{display:flex; gap:26px; font-size:14px; color:var(--faint); flex-wrap:wrap;}
-  .cover .meta b{color:var(--ink); font-weight:600;}
-  /* 章节 */
-  section{margin:0 0 40px;}
+  .header-copy{position:relative; z-index:1; min-width:0;}
+  .kicker{
+    display:inline-flex; align-items:center; gap:10px; width:max-content;
+    padding:8px 12px; border:1px solid var(--line); background:rgba(255,255,255,.70);
+    color:var(--indigo); font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  }
+  .kicker::before{content:""; width:8px; height:8px; border-radius:50%; background:var(--teal);}
+  h1{font-size:38px; line-height:1.18; margin:24px 0 12px; max-width:760px; letter-spacing:0; font-weight:760;}
+  .tagline{font-size:17px; color:var(--muted); margin:0; max-width:720px;}
+  .meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+  .meta span{
+    border:1px solid var(--line); background:rgba(255,255,255,.74);
+    padding:9px 12px; font-size:13px; color:var(--muted);
+  }
+  .meta b{color:var(--ink); font-weight:700;}
+  .flow-board{
+    position:relative;
+    border:1px solid rgba(184,193,207,.86); background:
+      linear-gradient(135deg,rgba(255,255,255,.96),rgba(240,248,247,.90));
+    box-shadow:0 18px 50px rgba(23,32,42,.12); padding:18px; overflow:hidden;
+  }
+  .flow-board::before{
+    content:""; position:absolute; inset:18px; pointer-events:none; opacity:.72;
+    background:
+      linear-gradient(90deg,rgba(41,48,109,.08) 1px,transparent 1px),
+      linear-gradient(0deg,rgba(31,118,111,.07) 1px,transparent 1px);
+    background-size:28px 28px;
+  }
+  .board-title{
+    position:relative; z-index:2; display:flex; justify-content:space-between; align-items:center;
+    font-size:12px; color:var(--faint); letter-spacing:.10em; text-transform:uppercase; margin-bottom:12px;
+  }
+  .board-title b{color:var(--ink); letter-spacing:0; text-transform:none; font-size:14px;}
+  .board-svg{position:relative; z-index:2; width:100%; height:auto; display:block;}
+  .board-note{
+    position:relative; z-index:3; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px;
+  }
+  .board-note span{
+    padding:8px 10px; background:rgba(255,255,255,.76); border:1px solid rgba(207,199,183,.86);
+    color:var(--muted); font-size:12px; backdrop-filter:blur(8px);
+  }
+  main{padding:34px 46px 50px;}
+  .summary-strip{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:0 0 38px;
+    position:relative; z-index:3;
+  }
+  .summary-item{
+    background:rgba(255,255,255,.94); border:1px solid var(--line); padding:18px 18px 16px;
+    box-shadow:0 12px 34px rgba(23,32,42,.08);
+  }
+  .summary-item .label{font-size:12px; color:var(--faint); letter-spacing:.10em; text-transform:uppercase; font-weight:700;}
+  .summary-item .value{font-size:20px; margin-top:6px; font-weight:760; color:var(--ink);}
+  section{margin:0 0 44px;}
   section > h2{
-    font-size:22px; font-weight:700; margin:0 0 18px; padding-left:16px;
-    position:relative; letter-spacing:-.01em;
+    display:flex; align-items:center; gap:12px; font-size:24px; font-weight:760;
+    margin:0 0 18px; letter-spacing:0;
   }
   section > h2::before{
-    content:""; position:absolute; left:0; top:4px; bottom:4px; width:5px;
-    border-radius:3px; background:var(--accent);
+    content:""; flex:0 0 34px; height:3px; background:linear-gradient(90deg,var(--indigo),var(--teal),var(--amber));
   }
+  h3{font-size:18px; margin:24px 0 10px;}
   p{margin:0 0 14px;}
-  strong{font-weight:650;}
-  .lead{font-size:17px;}
-  /* 高亮 callout */
+  strong{font-weight:720;}
+  .lead{font-size:18px; color:#243040;}
   .callout{
-    background:var(--accent-soft); border:1px solid #dfe2f7; border-radius:14px;
-    padding:18px 22px; margin:18px 0; color:var(--accent-ink);
+    display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start;
+    background:#f3f7f4; border:1px solid #dce8df; padding:18px 20px; margin:18px 0;
   }
-  .callout .label{font-weight:700; font-size:13px; letter-spacing:.04em; margin-bottom:6px;}
-  /* 图表卡片 */
+  .callout::before{
+    content:""; width:28px; height:28px; border-radius:50%;
+    background:radial-gradient(circle at 36% 36%,#fff 0 18%,var(--teal) 19% 100%);
+    box-shadow:0 0 0 5px rgba(31,118,111,.10);
+  }
+  .callout .label{font-weight:760; color:var(--teal); font-size:13px; letter-spacing:.06em; margin-bottom:4px;}
+  .insight-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:20px 0;}
+  .insight-card{
+    border:1px solid var(--line); background:var(--panel); padding:18px; min-height:132px;
+  }
+  .insight-card b{display:block; font-size:15px; margin-bottom:7px; color:var(--indigo);}
+  .insight-card p{font-size:14px; color:var(--muted); margin:0;}
+  .whiteboard{
+    background:#fff; border:1px solid var(--line); box-shadow:0 10px 28px rgba(23,32,42,.06);
+    padding:20px; margin:22px 0; overflow:hidden;
+  }
+  .whiteboard .cap,.chart-card .cap{font-size:13px; color:var(--faint); margin-top:12px; text-align:center;}
   .chart-card{
-    background:var(--card); border:1px solid var(--line); border-radius:16px;
-    padding:22px; margin:22px 0; box-shadow:0 1px 3px rgba(20,20,40,.04);
-    text-align:center;
+    background:#fff; border:1px solid var(--line); padding:22px; margin:22px 0;
+    box-shadow:0 10px 28px rgba(23,32,42,.06); overflow:hidden;
   }
-  .chart-card svg{max-width:100%; height:auto;}
-  .chart-card .cap{font-size:13px; color:var(--faint); margin-top:12px;}
-  /* 行动清单 */
-  ol.actions{padding-left:0; counter-reset:a; list-style:none; margin:8px 0;}
+  .chart-card svg,.whiteboard svg{max-width:100%; height:auto; display:block; margin:0 auto;}
+  .matrix{
+    display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--line); background:#fff; margin:18px 0;
+  }
+  .matrix > div{min-height:120px; padding:16px; border-right:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .matrix > div:nth-child(2n){border-right:0;}
+  .matrix > div:nth-last-child(-n+2){border-bottom:0;}
+  .matrix b{display:block; color:var(--indigo); margin-bottom:6px;}
+  .timeline{display:grid; gap:12px; margin:18px 0;}
+  .timeline-item{
+    display:grid; grid-template-columns:96px 1fr; gap:16px; border-left:3px solid var(--line);
+    padding:4px 0 4px 18px;
+  }
+  .timeline-item time{font-weight:760; color:var(--amber);}
+  .timeline-item p{margin:0; color:var(--muted);}
+  ol.actions{padding-left:0; counter-reset:a; list-style:none; margin:14px 0;}
   ol.actions li{
-    counter-increment:a; position:relative; padding:12px 0 12px 44px;
-    border-bottom:1px dashed var(--line);
+    counter-increment:a; position:relative; padding:16px 18px 16px 58px; margin:10px 0;
+    background:#fff; border:1px solid var(--line);
   }
   ol.actions li::before{
-    content:counter(a); position:absolute; left:0; top:11px;
-    width:28px; height:28px; border-radius:50%; background:var(--accent-soft);
-    color:var(--accent); font-weight:700; font-size:14px;
-    display:flex; align-items:center; justify-content:center;
+    content:counter(a); position:absolute; left:16px; top:16px;
+    width:28px; height:28px; border-radius:50%; background:var(--indigo);
+    color:#fff; font-weight:760; font-size:14px; display:flex; align-items:center; justify-content:center;
   }
-  /* 页脚 */
+  .risk-strip{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0;}
+  .risk-strip span{
+    padding:12px 14px; background:#fff7ed; border:1px solid #f1d8b8; color:#7c4215; font-size:14px;
+  }
   .foot{
-    margin-top:48px; padding-top:20px; border-top:1px solid var(--line);
-    font-size:12.5px; color:var(--faint); text-align:center;
+    margin-top:52px; padding:22px 46px; border-top:1px solid var(--line);
+    color:var(--faint); font-size:12.5px; text-align:center; background:#f3f7fa;
   }
-  /* 打印成 PDF 时更干净 */
+  @media (max-width:860px){
+    .page{padding:14px;}
+    .report-header{padding:28px 24px 26px;}
+    h1{font-size:32px;}
+    .board-note{grid-template-columns:1fr;}
+    main{padding:30px 24px 38px;}
+    .summary-strip,.insight-grid,.risk-strip{grid-template-columns:1fr;}
+    .summary-strip{margin:0 0 30px;}
+    .timeline-item{grid-template-columns:1fr; gap:4px;}
+    .matrix{grid-template-columns:1fr;}
+    .matrix > div{border-right:0;}
+    .matrix > div:nth-last-child(2){border-bottom:1px solid var(--line);}
+  }
   @media print{
-    body{background:#fff;}
-    .page{max-width:none; padding:0 12mm;}
-    .chart-card,.callout{break-inside:avoid;}
+    html,body{background:#fff;}
+    .page{max-width:none; padding:0;}
+    .report-shell{box-shadow:none; border:0;}
+    .report-header{break-inside:avoid;}
+    .summary-strip{margin:24px 0;}
+    .chart-card,.whiteboard,.callout,.insight-card,.summary-item,ol.actions li{break-inside:avoid;}
     section{break-inside:avoid-page;}
   }
 </style>
 </head>
 <body>
 <div class="page">
+  <article class="report-shell">
+    <header class="report-header">
+      <div class="header-copy">
+        <div class="kicker">Career Planning Report</div>
+        <h1>{{TAGLINE}}</h1>
+        <p class="tagline">一份为你量身定制的职业规划、能力判断与下一步行动设计。</p>
+        <div class="meta">
+          <span>规划对象 · <b>{{NAME}}</b></span>
+          <span>生成日期 · <b>{{DATE}}</b></span>
+          <span>方法 · <b>兴趣 × 能力 × 价值</b></span>
+        </div>
+      </div>
+    </header>
 
-  <header class="cover">
-    <div class="kicker">Career Planning Report · 职业规划报告</div>
-    <h1>{{TAGLINE}}</h1>
-    <p class="tagline">一份为你量身定制的职业规划与决策分析</p>
-    <div class="meta">
-      <span>规划对象 · <b>{{NAME}}</b></span>
-      <span>生成日期 · <b>{{DATE}}</b></span>
-      <span>by 职业规划导师 skill</span>
-    </div>
-  </header>
+    <main>
+      <div class="summary-strip">
+        <div class="summary-item"><div class="label">Core Signal</div><div class="value">能力甜区</div></div>
+        <div class="summary-item"><div class="label">Decision Lens</div><div class="value">复利优先</div></div>
+        <div class="summary-item"><div class="label">Next Step</div><div class="value">30/90 天实验</div></div>
+      </div>
 
-  <!-- CONTENT —— 下面是结构示例，填充时按这个写：
+      <section>
+        <h2>规划推演白板</h2>
+        <div class="flow-board" aria-label="职业规划策略白板">
+          <div class="board-title"><span>Strategic Whiteboard</span><b>从信号到行动</b></div>
+          <svg class="board-svg" viewBox="0 0 560 390" role="img" aria-labelledby="board-title board-desc">
+            <title id="board-title">职业规划策略白板</title>
+            <desc id="board-desc">展示兴趣信号、能力证据、方向假设、行动实验和复盘更新之间的职业规划流程。</desc>
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L8,3 z" fill="#29306d"/>
+              </marker>
+              <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#17202a" flood-opacity=".12"/>
+              </filter>
+            </defs>
+            <rect x="16" y="18" width="528" height="342" fill="rgba(255,255,255,.62)" stroke="#dde3eb"/>
+            <path d="M78 98 C142 56,190 70,244 122 S354 190,452 98" fill="none" stroke="#29306d" stroke-width="2.6" marker-end="url(#arrow)"/>
+            <path d="M104 242 C176 192,250 214,302 250 S404 316,484 236" fill="none" stroke="#1f766f" stroke-width="2.4" stroke-dasharray="7 7" marker-end="url(#arrow)"/>
+            <g filter="url(#softShadow)">
+              <rect x="38" y="60" width="128" height="78" fill="#ffffff" stroke="#c8d0dc"/>
+              <text x="58" y="88" fill="#29306d" font-size="15" font-weight="700">兴趣信号</text>
+              <text x="58" y="113" fill="#566170" font-size="12">投入感 / 好奇心</text>
+            </g>
+            <g filter="url(#softShadow)">
+              <rect x="216" y="96" width="128" height="78" fill="#ffffff" stroke="#c8d0dc"/>
+              <text x="236" y="124" fill="#29306d" font-size="15" font-weight="700">能力证据</text>
+              <text x="236" y="149" fill="#566170" font-size="12">高光 / 可迁移</text>
+            </g>
+            <g filter="url(#softShadow)">
+              <rect x="394" y="60" width="128" height="78" fill="#ffffff" stroke="#c8d0dc"/>
+              <text x="414" y="88" fill="#29306d" font-size="15" font-weight="700">方向假设</text>
+              <text x="414" y="113" fill="#566170" font-size="12">岗位 / 赛道 / 角色</text>
+            </g>
+            <g filter="url(#softShadow)">
+              <rect x="62" y="214" width="140" height="88" fill="#fffaf1" stroke="#ecd3ad"/>
+              <text x="82" y="244" fill="#9a5e20" font-size="15" font-weight="700">风险源</text>
+              <text x="82" y="269" fill="#7c4215" font-size="12">组织 / 裁员 / 行业</text>
+            </g>
+            <g filter="url(#softShadow)">
+              <rect x="250" y="226" width="132" height="76" fill="#f4fbf8" stroke="#cfe5dd"/>
+              <text x="270" y="254" fill="#1f766f" font-size="15" font-weight="700">行动实验</text>
+              <text x="270" y="278" fill="#566170" font-size="12">30 / 90 天验证</text>
+            </g>
+            <g filter="url(#softShadow)">
+              <rect x="420" y="200" width="104" height="104" fill="#f7f7ff" stroke="#d7daf4"/>
+              <text x="444" y="232" fill="#29306d" font-size="14" font-weight="700">复盘</text>
+              <circle cx="472" cy="260" r="25" fill="none" stroke="#29306d" stroke-width="6" stroke-dasharray="92 64"/>
+              <circle cx="472" cy="260" r="14" fill="none" stroke="#1f766f" stroke-width="5" stroke-dasharray="54 34"/>
+            </g>
+            <g transform="translate(38 322)">
+              <rect x="0" y="0" width="484" height="24" fill="#17202a" opacity=".06"/>
+              <rect x="0" y="0" width="142" height="24" fill="#29306d" opacity=".82"/>
+              <rect x="142" y="0" width="176" height="24" fill="#1f766f" opacity=".78"/>
+              <rect x="318" y="0" width="166" height="24" fill="#c6842e" opacity=".78"/>
+              <text x="18" y="16" fill="#fff" font-size="11">判断</text>
+              <text x="160" y="16" fill="#fff" font-size="11">路径</text>
+              <text x="338" y="16" fill="#fff" font-size="11">行动</text>
+            </g>
+          </svg>
+          <div class="board-note">
+            <span>先读出信号</span>
+            <span>再判断路径</span>
+            <span>最后落到实验</span>
+          </div>
+        </div>
+      </section>
 
-  <section>
-    <h2>一、我对你的判断</h2>
-    <p class="lead">……把关键判断写在这里……</p>
-    <div class="callout">
-      <div class="label">核心洞察</div>
-      一句最关键的话。
-    </div>
-  </section>
+      {{CONTENT}}
 
-  <section>
-    <h2>二、核心分析</h2>
-    <p>……</p>
-    <div class="chart-card">
-      （把生成的 SVG 粘到这里）
-      <div class="cap">图：你的能力甜区</div>
-    </div>
-  </section>
+      <section>
+        <h2>免责声明</h2>
+        <p>以上分析与建议仅供参考，不构成职业、法律、投资等任何方面的直接指导；所有选择的最终决定权始终在你自己手上。</p>
+      </section>
+    </main>
 
-  <section>
-    <h2>三、我的建议</h2>
-    <p>……</p>
-  </section>
-
-  <section>
-    <h2>四、接下来 30 / 90 天</h2>
-    <ol class="actions">
-      <li>第一件可执行的事</li>
-      <li>第二件</li>
-    </ol>
-  </section>
-
-  -->
-
-  <div class="foot">本报告由「职业规划导师」skill 生成 · 仅供参考，最终决定权始终在你手上</div>
+    <div class="foot">本报告由「职业规划导师」skill 生成 · 仅供参考，最终决定权始终在你手上</div>
+  </article>
 </div>
 </body>
 </html>
