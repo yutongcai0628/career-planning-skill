@@ -109,7 +109,8 @@ Redskill 如果要求上传 skill 目录，请选择 `.claude/skills/career-plan
     ├── README.md                   ← 给二次开发者的编辑地图
     ├── agents/openai.yaml           ← Codex/OpenAI 侧展示元数据
     ├── assets/
-    │   └── 报告模板.html             ← 导出用的精美报告模板（纯 HTML/CSS/SVG 图表）
+    │   ├── 报告模板.html             ← 导出用的精美报告模板（纯 HTML/CSS/SVG 图表）
+    │   └── 报告设计哲学.md           ← 「晨刊」视觉宪法（填报告前必读）
     └── references/
         ├── 持续档案.md              ← 跨对话记忆 + 迭代循环
         ├── 能力点挖掘.md            ← 从兴趣到能力（场景①）
