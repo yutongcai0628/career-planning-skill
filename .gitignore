@@ -12,3 +12,6 @@
 # 本地发布包（请用干净目录或 git archive 生成）
 *.zip
 *.tar.gz
+
+# 本地开发工具配置
+.claude/launch.json
