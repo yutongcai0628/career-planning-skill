@@ -117,10 +117,11 @@
   .bar-fill.ok{background:var(--ok);} .bar-fill.warn{background:var(--warn);} .bar-fill.bad{background:var(--bad);}
   .bar-row .bv{font-family:var(--en); font-size:13px; color:var(--ink); text-align:right;}
 
-  /* ── 环形图：缓缓转出百分比 ── */
+  /* ── 环形图：缓缓转出百分比（数字用绝对定位居中，绝不粘连） ── */
   .rings{display:flex; gap:36px; justify-content:center; flex-wrap:wrap; margin:40px 0;}
   .ring{text-align:center;}
-  .ring svg{width:132px; height:132px; transform:rotate(-90deg);}
+  .ring .dial{position:relative; width:132px; height:132px; margin:0 auto;}
+  .ring .dial svg{width:132px; height:132px; transform:rotate(-90deg); display:block;}
   .ring circle{fill:none; stroke-width:8;}
   .ring circle.track{stroke:var(--gold-tint);}
   .ring circle.val{
@@ -129,12 +130,12 @@
   }
   .ring circle.val.ok{stroke:var(--ok);} .ring circle.val.warn{stroke:var(--warn);}
   .ring .rv{
-    margin-top:-86px; margin-bottom:44px; font-family:var(--en); font-size:24px;
-    font-weight:500; color:var(--ink); position:relative;
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:var(--en); font-size:22px; font-weight:500; color:var(--ink);
   }
   .ring .rl{
     display:block; font-family:var(--en); font-size:10.5px; letter-spacing:.28em;
-    text-transform:uppercase; color:var(--faint); margin-top:6px;
+    text-transform:uppercase; color:var(--faint); margin-top:14px; max-width:150px;
   }
 
   /* ── 金句 ── */
@@ -201,6 +202,7 @@
   details.expand summary::after{content:"+"; font-size:18px; transition:transform .45s cubic-bezier(.22,.6,.2,1);}
   details.expand[open] summary::after{transform:rotate(45deg);}
   details.expand .body{padding:2px 28px 22px; border-top:1px solid var(--hairline);}
+  details.expand:not([open]) .body{display:none;}  /* 显式隐藏，别依赖浏览器默认，否则会溢出压到下文 */
 
   /* ── 四象限 / 时间线 / 行动清单 ── */
   .matrix{display:grid; grid-template-columns:1fr 1fr; margin:34px 0; border:1px solid var(--hairline); background:var(--panel);}
@@ -293,8 +295,11 @@
     </div>
     <div class="rings">
       <div class="ring">
-        <svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="42"/><circle class="val" cx="50" cy="50" r="42" style="--p:60"/></svg>
-        <div class="rv">60%<span class="rl">Ads Target</span></div>
+        <div class="dial">
+          <svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="42"/><circle class="val" cx="50" cy="50" r="42" style="--p:60"/></svg>
+          <div class="rv">60%</div>
+        </div>
+        <span class="rl">Ads Target</span>
       </div>
     </div>
     <details class="expand"><summary>Read More · 展开完整分析</summary><div class="body"><p>深读内容，打印时自动展开。</p></div></details>
