@@ -6,32 +6,32 @@
 <title>职业规划报告 · {{NAME}}</title>
 <!--
   使用说明（给填充这个模板的 AI 看，不要保留在最终文件里）：
-  1. 先读同目录《报告设计哲学.md》（墨与光 Ink & Light），再动手。
+  1. 先读同目录《报告设计哲学.md》（晨刊 The Morning Issue），再动手。
   2. 替换 {{NAME}} {{DATE}} {{TAGLINE}} {{CONTENT}}。
   3. 字体：英文与数字走 Futura（fallback Century Gothic／Avenir Next），
      中文走微软雅黑（fallback PingFang SC）。font stack 已配好，别改。
   4. 标点纪律（硬要求）：中文语境一律全角标点（，。：；！？「」《》），
      中文引用用「」；英文标签一律英文标点；中英夹排时数字与英文两侧各留一个空格。
-  5. 动效全部纯 CSS，禁止 <script>：
-     - 封面元素加 class="rise"，用 style="--d:.2s" 控制先后；
-     - 正文每个 section／.pullquote／.chart-card 加 class="reveal"，
-       支持 scroll-timeline 的浏览器会随滚动渐显，其余浏览器静态完整显示；
-     - hover 交互（金线、辉光、编号变金）模板自带，不用额外写。
-  6. 需要"点开细看"的深读内容用 <details class="expand">：
-     <details class="expand"><summary>展开完整分析</summary><div class="body">…</div></details>
-  7. 用户粘贴的 JD、履历、聊天原文必须先转义 & < > " '；
+  5. 图表纪律（硬要求）：数据是主角，纯文字报告不合格——每份至少
+     1 组 .stat-strip ＋ 2 个图表件（.bars 条形图／.ring 环形图／.chart-card SVG 任选）。
+  6. 动效全部纯 CSS，禁止 <script>：
+     - 封面元素加 class="rise"，style="--d:.2s" 控制先后；
+     - 正文 section／.pullquote／.chart-card 加 class="reveal"（滚动登场，老浏览器静态完整）；
+     - 条形图 .bar-fill 用 style="--w:72%" 定宽，进入视野自动生长；
+     - 环形图 .ring 用 style="--p:60" 定百分比（0–100），进入视野自动转出。
+  7. 深读内容用 <details class="expand"><summary>…</summary><div class="body">…</div></details>。
+  8. 用户粘贴的 JD、履历、聊天原文必须先转义 & < > " '；
      禁止 script／iframe／on* 事件属性／外链资源。
-  8. 图表用安全内联 SVG，只用 :root 固定色：金线细描、几何形、低饱和状态色。
-  9. 打印自动切回象牙白纸面（已内置），不用处理。
-  10. 输出到 职业档案/报告/职业规划报告-<名字>-<日期>.html。
+  9. SVG 图表只用 :root 固定色：金线细描、几何形、低饱和状态色。
+  10. 打印为纸张优化（已内置）。输出到 职业档案/报告/职业规划报告-<名字>-<日期>.html。
 -->
 <style>
   :root{
-    --paper:#12110e; --panel:#1a1815;
-    --ink:#ece7db; --muted:#a59d8c; --faint:#6f685a;
-    --hairline:rgba(236,231,219,.13); --hairline-strong:rgba(236,231,219,.3);
-    --gold:#c9a35c; --gold-soft:rgba(201,163,92,.32);
-    --ok:#8fae7f; --warn:#d3aa5b; --bad:#c97b62;
+    --paper:#fcfbf7; --panel:#ffffff;
+    --ink:#201f1a; --muted:#6d675c; --faint:#9b9488;
+    --hairline:#e8e3d7; --hairline-dark:#cfc8b7;
+    --gold:#9c6f2d; --gold-soft:rgba(156,111,45,.28); --gold-tint:rgba(156,111,45,.07);
+    --ok:#5f7355; --warn:#a8823e; --bad:#9c4a3c;
     --en:'Futura','Futura PT','Century Gothic','Avenir Next','Microsoft YaHei','PingFang SC',sans-serif;
     --zh:'Futura','Century Gothic','Avenir Next','Microsoft YaHei','PingFang SC','Hiragino Sans GB',sans-serif;
   }
@@ -42,65 +42,65 @@
     font-family:var(--zh); font-size:15.5px; line-height:2.05; font-weight:400;
     -webkit-font-smoothing:antialiased;
   }
-  ::selection{background:var(--gold); color:#12110e;}
-  .page{max-width:700px; margin:0 auto; padding:0 32px 130px;}
+  ::selection{background:var(--gold); color:#fff;}
+  .page{max-width:720px; margin:0 auto; padding:0 32px 120px;}
 
   /* ── 动效：登场，不是表演 ── */
   @keyframes rise{from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:none;}}
   @keyframes grow{from{transform:scaleX(0);} to{transform:scaleX(1);}}
+  @keyframes barGrow{from{width:0;} to{width:var(--w,60%);}}
+  @keyframes ringTurn{from{stroke-dashoffset:264;} to{stroke-dashoffset:calc(264 - 264*var(--p,50)/100);}}
   .rise{animation:rise 1s cubic-bezier(.22,.6,.2,1) both; animation-delay:var(--d,0s);}
   .rule-grow{transform-origin:center; animation:grow 1.4s cubic-bezier(.22,.6,.2,1) both; animation-delay:var(--d,.35s);}
   @supports (animation-timeline: view()){
-    .reveal{
-      animation:rise 1s cubic-bezier(.22,.6,.2,1) both;
-      animation-timeline:view(); animation-range:entry 0% entry 42%;
-    }
+    .reveal{animation:rise 1s cubic-bezier(.22,.6,.2,1) both; animation-timeline:view(); animation-range:entry 0% entry 42%;}
+    .bar-fill{animation:barGrow 1.2s cubic-bezier(.22,.6,.2,1) both; animation-timeline:view(); animation-range:entry 0% entry 60%;}
+    .ring circle.val{animation:ringTurn 1.4s cubic-bezier(.22,.6,.2,1) both; animation-timeline:view(); animation-range:entry 0% entry 60%;}
   }
-  @media (prefers-reduced-motion:reduce){.rise,.rule-grow,.reveal{animation:none;}}
+  @media (prefers-reduced-motion:reduce){.rise,.rule-grow,.reveal,.bar-fill,.ring circle.val{animation:none;}}
 
   /* ── 封面 ── */
-  header.cover{text-align:center; padding:110px 0 76px;}
+  header.cover{text-align:center; padding:100px 0 70px;}
   .kicker{
-    font-family:var(--en); font-size:11px; letter-spacing:.52em; text-transform:uppercase;
-    color:var(--gold); font-weight:500; margin-bottom:40px;
+    font-family:var(--en); font-size:11px; letter-spacing:.5em; text-transform:uppercase;
+    color:var(--gold); font-weight:500; margin-bottom:38px;
   }
-  h1{font-size:36px; line-height:1.6; font-weight:600; letter-spacing:.05em; margin:0 0 24px;}
-  .tagline{font-size:14.5px; color:var(--muted); max-width:470px; margin:0 auto 48px; letter-spacing:.04em;}
+  h1{font-size:36px; line-height:1.58; font-weight:600; letter-spacing:.05em; margin:0 0 24px;}
+  .tagline{font-size:14.5px; color:var(--muted); max-width:470px; margin:0 auto 46px; letter-spacing:.04em;}
   .meta{
     display:flex; justify-content:center; gap:42px; flex-wrap:wrap;
     font-family:var(--en); font-size:11px; letter-spacing:.26em; text-transform:uppercase; color:var(--faint);
   }
   .meta b{color:var(--ink); font-weight:500;}
-  .cover-rule{border:0; border-top:1px solid var(--hairline-strong); margin:70px auto 0;}
+  .cover-rule{border:0; border-top:1px solid var(--hairline-dark); margin:66px auto 0;}
 
   /* ── 章节 ── */
-  section{margin:0 0 96px;}
+  section{margin:0 0 92px;}
   section > h2{
     font-size:22px; font-weight:600; letter-spacing:.08em;
-    margin:0 0 34px; padding-top:38px; position:relative;
+    margin:0 0 32px; padding-top:36px; position:relative;
   }
   section > h2::before{
     content:""; position:absolute; top:0; left:0; width:42px; height:2px;
     background:var(--gold); transition:width .6s cubic-bezier(.22,.6,.2,1);
   }
   section:hover > h2::before{width:100px;}
-  h3{font-size:15.5px; font-weight:600; letter-spacing:.06em; margin:38px 0 12px;}
+  h3{font-size:15.5px; font-weight:600; letter-spacing:.06em; margin:36px 0 12px;}
   p{margin:0 0 20px;}
-  strong{font-weight:600; color:#fff8ec;}
-  .lead{font-size:18px; line-height:2; color:#d9d2c2; letter-spacing:.02em;}
+  strong{font-weight:600;}
+  .lead{font-size:18px; line-height:2; color:#3a3830; letter-spacing:.02em;}
 
-  /* ── 数据大字报：展柜里的器物 ── */
+  /* ── 数据大字报 ── */
   .stat-strip{
-    display:grid; grid-template-columns:repeat(3,1fr); margin:46px 0;
+    display:grid; grid-template-columns:repeat(3,1fr); margin:44px 0;
     border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline);
   }
-  .stat{padding:32px 12px; text-align:center; transition:background .5s;}
+  .stat{padding:30px 12px; text-align:center; transition:background .5s;}
   .stat + .stat{border-left:1px solid var(--hairline);}
-  .stat:hover{background:rgba(201,163,92,.05);}
+  .stat:hover{background:var(--gold-tint);}
   .stat .num{
     font-family:var(--en); font-size:44px; font-weight:500; letter-spacing:.02em;
     line-height:1.1; display:block; color:var(--ink);
-    text-shadow:0 0 26px var(--gold-soft);
   }
   .stat .num em{font-style:normal; color:var(--gold);}
   .stat .lab{
@@ -108,9 +108,38 @@
     letter-spacing:.32em; text-transform:uppercase; color:var(--faint);
   }
 
-  /* ── 金句：hover 时光才醒来 ── */
+  /* ── 条形图：进入视野才生长 ── */
+  .bars{margin:38px 0;}
+  .bar-row{display:grid; grid-template-columns:130px 1fr 56px; gap:14px; align-items:center; padding:10px 0;}
+  .bar-row .bl{font-size:13px; color:var(--muted); letter-spacing:.02em;}
+  .bar-track{height:8px; background:var(--gold-tint); border-radius:0; overflow:hidden;}
+  .bar-fill{display:block; height:100%; width:var(--w,60%); background:var(--gold);}
+  .bar-fill.ok{background:var(--ok);} .bar-fill.warn{background:var(--warn);} .bar-fill.bad{background:var(--bad);}
+  .bar-row .bv{font-family:var(--en); font-size:13px; color:var(--ink); text-align:right;}
+
+  /* ── 环形图：缓缓转出百分比 ── */
+  .rings{display:flex; gap:36px; justify-content:center; flex-wrap:wrap; margin:40px 0;}
+  .ring{text-align:center;}
+  .ring svg{width:132px; height:132px; transform:rotate(-90deg);}
+  .ring circle{fill:none; stroke-width:8;}
+  .ring circle.track{stroke:var(--gold-tint);}
+  .ring circle.val{
+    stroke:var(--gold); stroke-linecap:butt;
+    stroke-dasharray:264; stroke-dashoffset:calc(264 - 264*var(--p,50)/100);
+  }
+  .ring circle.val.ok{stroke:var(--ok);} .ring circle.val.warn{stroke:var(--warn);}
+  .ring .rv{
+    margin-top:-86px; margin-bottom:44px; font-family:var(--en); font-size:24px;
+    font-weight:500; color:var(--ink); position:relative;
+  }
+  .ring .rl{
+    display:block; font-family:var(--en); font-size:10.5px; letter-spacing:.28em;
+    text-transform:uppercase; color:var(--faint); margin-top:6px;
+  }
+
+  /* ── 金句 ── */
   .pullquote{
-    text-align:center; margin:64px 0; padding:50px 24px; position:relative;
+    text-align:center; margin:62px 0; padding:48px 24px;
     border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline);
     transition:border-color .7s;
   }
@@ -128,11 +157,11 @@
 
   /* ── 核心洞察 ── */
   .callout{
-    margin:36px 0; padding:28px 32px; background:var(--panel);
+    margin:34px 0; padding:26px 30px; background:var(--panel);
     border:1px solid var(--hairline); border-left:2px solid var(--gold);
-    transition:border-color .5s, transform .5s;
+    transition:transform .5s, border-color .5s;
   }
-  .callout:hover{border-color:var(--gold-soft); border-left-color:var(--gold); transform:translateY(-2px);}
+  .callout:hover{transform:translateY(-2px); border-color:var(--gold-soft); border-left-color:var(--gold);}
   .callout .label{
     font-family:var(--en); font-size:10.5px; letter-spacing:.4em; text-transform:uppercase;
     color:var(--gold); margin-bottom:10px; font-weight:500;
@@ -140,31 +169,28 @@
   .callout p{margin:0;}
 
   /* ── 三栏小卡 ── */
-  .insight-grid{display:grid; grid-template-columns:repeat(3,1fr); margin:40px 0; border-top:1px solid var(--hairline);}
-  .insight-card{padding:26px 20px 12px; border-bottom:1px solid var(--hairline); transition:background .5s;}
+  .insight-grid{display:grid; grid-template-columns:repeat(3,1fr); margin:38px 0; border-top:1px solid var(--hairline);}
+  .insight-card{padding:24px 20px 10px; border-bottom:1px solid var(--hairline); transition:background .5s;}
   .insight-card + .insight-card{border-left:1px solid var(--hairline);}
-  .insight-card:hover{background:rgba(201,163,92,.04);}
+  .insight-card:hover{background:var(--gold-tint);}
   .insight-card b{display:block; font-size:15px; font-weight:600; margin-bottom:10px; letter-spacing:.04em;}
   .insight-card p{font-size:13px; color:var(--muted); line-height:1.9;}
 
-  /* ── 图表／画板 ── */
+  /* ── 图表卡 / 画板 ── */
   .chart-card,.whiteboard{
-    margin:48px 0; padding:40px 28px 28px; background:var(--panel);
+    margin:46px 0; padding:38px 28px 26px; background:var(--panel);
     border:1px solid var(--hairline); text-align:center; transition:border-color .6s;
   }
   .chart-card:hover,.whiteboard:hover{border-color:var(--gold-soft);}
   .chart-card svg,.whiteboard svg{max-width:100%; height:auto;}
   .cap{
-    margin-top:22px; font-family:var(--en); font-size:11px; color:var(--faint);
+    margin-top:20px; font-family:var(--en); font-size:11px; color:var(--faint);
     letter-spacing:.28em; text-transform:uppercase;
   }
   .cap::before{content:"fig. "; color:var(--gold);}
 
-  /* ── 可展开的深读抽屉 ── */
-  details.expand{
-    margin:30px 0; background:var(--panel); border:1px solid var(--hairline);
-    transition:border-color .5s;
-  }
+  /* ── 深读抽屉 ── */
+  details.expand{margin:30px 0; background:var(--panel); border:1px solid var(--hairline); transition:border-color .5s;}
   details.expand:hover{border-color:var(--gold-soft);}
   details.expand summary{
     list-style:none; cursor:pointer; padding:20px 26px;
@@ -172,32 +198,30 @@
     color:var(--gold); display:flex; justify-content:space-between; align-items:center;
   }
   details.expand summary::-webkit-details-marker{display:none;}
-  details.expand summary::after{
-    content:"+"; font-size:18px; font-weight:400; transition:transform .45s cubic-bezier(.22,.6,.2,1);
-  }
+  details.expand summary::after{content:"+"; font-size:18px; transition:transform .45s cubic-bezier(.22,.6,.2,1);}
   details.expand[open] summary::after{transform:rotate(45deg);}
-  details.expand .body{padding:2px 28px 24px; border-top:1px solid var(--hairline);}
+  details.expand .body{padding:2px 28px 22px; border-top:1px solid var(--hairline);}
 
-  /* ── 四象限／时间线／行动清单 ── */
-  .matrix{display:grid; grid-template-columns:1fr 1fr; margin:36px 0; border:1px solid var(--hairline); background:var(--panel);}
+  /* ── 四象限 / 时间线 / 行动清单 ── */
+  .matrix{display:grid; grid-template-columns:1fr 1fr; margin:34px 0; border:1px solid var(--hairline); background:var(--panel);}
   .matrix > div{padding:22px 24px; border-right:1px solid var(--hairline); border-bottom:1px solid var(--hairline); min-height:110px;}
   .matrix > div:nth-child(2n){border-right:0;}
   .matrix > div:nth-last-child(-n+2){border-bottom:0;}
   .matrix b{display:block; font-size:14px; margin-bottom:8px;}
   .matrix p{font-size:13px; color:var(--muted); margin:0; line-height:1.85;}
-  .timeline{margin:36px 0;}
+  .timeline{margin:34px 0;}
   .timeline-item{display:grid; grid-template-columns:116px 1fr; gap:24px; padding:18px 4px; border-bottom:1px solid var(--hairline);}
   .timeline-item:first-child{border-top:1px solid var(--hairline);}
   .timeline-item time{font-family:var(--en); font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); padding-top:6px;}
   .timeline-item p{margin:0; font-size:14.5px;}
-  ol.actions{list-style:none; counter-reset:a; padding:0; margin:36px 0;}
+  ol.actions{list-style:none; counter-reset:a; padding:0; margin:34px 0;}
   ol.actions li{
-    counter-increment:a; display:grid; grid-template-columns:66px 1fr; gap:20px;
+    counter-increment:a; display:grid; grid-template-columns:64px 1fr; gap:20px;
     padding:22px 8px; border-bottom:1px solid var(--hairline); align-items:baseline;
     transition:background .5s, padding-left .5s;
   }
   ol.actions li:first-child{border-top:1px solid var(--hairline);}
-  ol.actions li:hover{background:rgba(201,163,92,.04); padding-left:16px;}
+  ol.actions li:hover{background:var(--gold-tint); padding-left:16px;}
   ol.actions li::before{
     content:counter(a,decimal-leading-zero);
     font-family:var(--en); font-size:17px; font-weight:500; color:var(--faint);
@@ -209,12 +233,12 @@
 
   /* ── 页脚 ── */
   .footnote{
-    margin-top:110px; padding-top:32px; border-top:1px solid var(--hairline);
+    margin-top:104px; padding-top:30px; border-top:1px solid var(--hairline);
     text-align:center; font-size:12px; color:var(--faint); line-height:2.1;
   }
   .footnote .fin{
-    display:block; margin-bottom:20px; font-family:var(--en); font-size:11px;
-    letter-spacing:.52em; text-transform:uppercase; color:var(--gold-soft);
+    display:block; margin-bottom:18px; font-family:var(--en); font-size:11px;
+    letter-spacing:.5em; text-transform:uppercase; color:var(--hairline-dark);
   }
 
   @media (max-width:640px){
@@ -222,25 +246,14 @@
     .stat-strip,.insight-grid{grid-template-columns:1fr;}
     .stat + .stat,.insight-card + .insight-card{border-left:0;}
     .timeline-item,ol.actions li{grid-template-columns:1fr; gap:6px;}
+    .bar-row{grid-template-columns:96px 1fr 48px;}
   }
-
-  /* ── 打印：灯光收起，回到纸面 ── */
   @media print{
-    :root{
-      --paper:#ffffff; --panel:#faf8f3; --ink:#1e1d1a; --muted:#6e6a61; --faint:#9d978b;
-      --hairline:#e5e0d4; --hairline-strong:#cfc8b8;
-      --gold:#8c6b4f; --gold-soft:rgba(140,107,79,.3);
-      --ok:#5f7355; --warn:#a8823e; --bad:#9c4a3c;
-    }
     body{background:#fff;}
-    strong{color:#1e1d1a;}
-    .lead{color:#38352e;}
-    .stat .num{text-shadow:none; color:#1e1d1a;}
     .page{max-width:none; padding:0 14mm;}
-    .rise,.rule-grow,.reveal{animation:none;}
-    details.expand{border:1px solid #e5e0d4;}
-    details.expand:not([open]) .body{display:block;}  /* 打印时展开全部内容 */
-    section,.chart-card,.callout,.pullquote,.stat-strip{break-inside:avoid;}
+    .rise,.rule-grow,.reveal,.bar-fill,.ring circle.val{animation:none;}
+    details.expand:not([open]) .body{display:block;}
+    section,.chart-card,.callout,.pullquote,.stat-strip,.bars,.rings{break-inside:avoid;}
   }
 </style>
 </head>
@@ -250,7 +263,7 @@
   <header class="cover">
     <div class="kicker rise">Career Planning Journal</div>
     <h1 class="rise" style="--d:.12s">{{TAGLINE}}</h1>
-    <p class="tagline rise" style="--d:.24s">一份为你而写的职业规划——像一期只印一册的夜间特辑</p>
+    <p class="tagline rise" style="--d:.24s">一份为你而写的职业规划——像一期只印一册的晨间特辑</p>
     <div class="meta rise" style="--d:.36s">
       <span>For · <b>{{NAME}}</b></span>
       <span>Issue · <b>{{DATE}}</b></span>
@@ -259,7 +272,7 @@
   </header>
 
   {{CONTENT}}
-  <!-- CONTENT 结构示例（填充时删除本注释；注意标点纪律）：
+  <!-- CONTENT 结构示例（填充时删除本注释；注意标点与图表纪律）：
 
   <section class="reveal">
     <h2>一、我对你的判断</h2>
@@ -269,27 +282,28 @@
       <div class="stat"><span class="num">3<em>+</em></span><span class="lab">Months Sustained</span></div>
       <div class="stat"><span class="num">12<em>+</em></span><span class="lab">Months Runway</span></div>
     </div>
-    <div class="callout">
-      <div class="label">The Insight</div>
-      <p>那句最关键的话。</p>
+    <div class="callout"><div class="label">The Insight</div><p>那句最关键的话。</p></div>
+  </section>
+
+  <section class="reveal">
+    <h2>二、核心分析</h2>
+    <div class="bars">
+      <div class="bar-row"><span class="bl">广告收入</span><span class="bar-track"><span class="bar-fill" style="--w:100%"></span></span><span class="bv">4.75 万</span></div>
+      <div class="bar-row"><span class="bl">大厂工资</span><span class="bar-track"><span class="bar-fill warn" style="--w:62%"></span></span><span class="bv">&lt;3 万</span></div>
     </div>
-    <details class="expand">
-      <summary>Read More · 展开完整分析</summary>
-      <div class="body"><p>深读内容放这里，打印时会自动展开。</p></div>
-    </details>
+    <div class="rings">
+      <div class="ring">
+        <svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="42"/><circle class="val" cx="50" cy="50" r="42" style="--p:60"/></svg>
+        <div class="rv">60%<span class="rl">Ads Target</span></div>
+      </div>
+    </div>
+    <details class="expand"><summary>Read More · 展开完整分析</summary><div class="body"><p>深读内容，打印时自动展开。</p></div></details>
   </section>
 
   <div class="pullquote reveal">
     <p>「你站在金矿上，却以为自己在搬砖。」</p>
     <span class="by">Theme of This Issue</span>
   </div>
-
-  <section class="reveal">
-    <h2>四、接下来 30 天与 90 天</h2>
-    <ol class="actions">
-      <li>第一件立刻能动手的事。</li>
-    </ol>
-  </section>
   -->
 
   <div class="footnote">
