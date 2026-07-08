@@ -6,195 +6,185 @@
 <title>职业规划报告 · {{NAME}}</title>
 <!--
   使用说明（给填充这个模板的 AI 看，不要保留在最终文件里）：
-  1. 替换 {{NAME}} {{DATE}} {{TAGLINE}} {{CONTENT}}。
-  2. 视觉基调是 Kinfolk 式杂志编辑排版：大量留白、衬线标题、细线分隔、
-     奶油纸色底、极克制的暖棕点缀。填充内容时不要往里加彩色块、阴影、
-     渐变或 emoji 堆砌——安静是这个模板的核心。
-  3. 用户粘贴的 JD、履历、聊天原文必须先转义 & < > " '，不能保留
-     script/iframe/on* 事件属性或外链脚本；只允许模型自己生成的结构标签进入。
-  4. 图表用安全内联 SVG，粘进 .chart-card 或 .whiteboard；独立 HTML 里没有
-     widget 的 CSS 变量，SVG 配色改用本模板 :root 的固定色。
-  5. 结构件：section / .kicker / .pullquote / .callout / .insight-grid /
-     .chart-card / .whiteboard / .matrix / .timeline / ol.actions / .footnote。
-  6. 输出文件存到 职业档案/报告/ 下，文件名如「职业规划报告-姓名-日期.html」。
+  1. 先读同目录的《报告设计哲学.md》（静几何 Quiet Geometry），再动手。
+  2. 替换 {{NAME}} {{DATE}} {{TAGLINE}} {{CONTENT}}。
+  3. 字体：英文/数字走 Futura（fallback Century Gothic/Avenir Next），
+     中文走微软雅黑（fallback PingFang SC）——font stack 已配好，别改。
+  4. 动效全部是纯 CSS（淡入上浮、细线生长）：禁止引入 <script>；
+     给要入场的元素加 class="rise"，先后顺序用 style="--d:.2s" 控制延迟。
+  5. 用户粘贴的 JD、履历、聊天原文必须先转义 & < > " '；
+     禁止 script/iframe/on* 事件属性/外链资源。
+  6. 图表用安全内联 SVG，配色只用 :root 固定色（几何、细线、低饱和）。
+  7. 结构件：section / .kicker / .stat-strip（数据大字报，Futura 的主场）/
+     .pullquote / .callout / .insight-grid / .chart-card / .whiteboard /
+     .matrix / .timeline / ol.actions / .footnote / 状态色 .ok .warn .bad。
+  8. 输出到 职业档案/报告/职业规划报告-<名字>-<日期>.html。
 -->
 <style>
   :root{
-    --paper:#faf8f3; --panel:#fffdf9;
-    --ink:#21201c; --muted:#6f6a60; --faint:#9a948a;
-    --hairline:#e3ded2; --hairline-dark:#c9c2b2;
-    --accent:#8c6b4f;
+    --paper:#fbf9f4; --panel:#fffefb;
+    --ink:#1e1d1a; --muted:#6e6a61; --faint:#9d978b;
+    --hairline:#e5e0d4; --hairline-dark:#cfc8b8;
+    --accent:#a85d3c;              /* 赤陶色：唯一的点睛 */
     --ok:#5f7355; --warn:#a8823e; --bad:#9c4a3c;
+    --en:'Futura','Futura PT','Century Gothic','Avenir Next','Microsoft YaHei','PingFang SC',sans-serif;
+    --zh:'Futura','Century Gothic','Avenir Next','Microsoft YaHei','PingFang SC','Hiragino Sans GB',sans-serif;
   }
   *{box-sizing:border-box;}
   body{
     margin:0; background:var(--paper); color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
-    font-size:16px; line-height:1.95; font-weight:400;
+    font-family:var(--zh); font-size:15.5px; line-height:2.05; font-weight:400;
     -webkit-font-smoothing:antialiased;
   }
-  .serif{font-family:"Playfair Display","Noto Serif SC","Songti SC",STSong,"SimSun",serif;}
-  .page{max-width:720px; margin:0 auto; padding:0 32px 110px;}
+  .page{max-width:700px; margin:0 auto; padding:0 32px 120px;}
 
-  /* ── 封面：居中、安静、像杂志扉页 ── */
-  header.cover{ text-align:center; padding:96px 0 64px; }
-  .kicker{
-    font-size:11px; letter-spacing:.42em; text-transform:uppercase;
-    color:var(--accent); font-weight:500; margin-bottom:34px;
+  /* ── 动效：呼吸，不是杂技 ── */
+  @keyframes rise{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:none;}}
+  @keyframes grow{from{transform:scaleX(0);} to{transform:scaleX(1);}}
+  .rise{animation:rise .9s cubic-bezier(.22,.6,.2,1) both; animation-delay:var(--d,0s);}
+  .rule-grow{transform-origin:center; animation:grow 1.2s cubic-bezier(.22,.6,.2,1) both; animation-delay:var(--d,.3s);}
+  @media (prefers-reduced-motion:reduce){
+    .rise,.rule-grow{animation:none;}
   }
-  .kicker::after{
-    content:""; display:block; width:36px; height:1px;
-    background:var(--hairline-dark); margin:26px auto 0;
+
+  /* ── 封面 ── */
+  header.cover{text-align:center; padding:104px 0 72px;}
+  .kicker{
+    font-family:var(--en); font-size:11px; letter-spacing:.5em; text-transform:uppercase;
+    color:var(--accent); font-weight:500; margin-bottom:38px;
   }
   h1{
-    font-family:"Playfair Display","Noto Serif SC","Songti SC",STSong,serif;
-    font-size:40px; line-height:1.42; font-weight:600; letter-spacing:.02em;
-    margin:0 0 26px;
+    font-family:var(--zh); font-size:36px; line-height:1.55; font-weight:600;
+    letter-spacing:.05em; margin:0 0 24px;
   }
-  .tagline{
-    font-size:15.5px; color:var(--muted); font-style:normal;
-    max-width:480px; margin:0 auto 44px;
-  }
+  .tagline{font-size:14.5px; color:var(--muted); max-width:460px; margin:0 auto 46px; letter-spacing:.04em;}
   .meta{
-    display:flex; justify-content:center; gap:34px; flex-wrap:wrap;
-    font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint);
+    display:flex; justify-content:center; gap:40px; flex-wrap:wrap;
+    font-family:var(--en); font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--faint);
   }
-  .meta b{color:var(--ink); font-weight:500; letter-spacing:.08em;}
-  .cover-rule{ border:0; border-top:1px solid var(--hairline); margin:64px auto 0; }
+  .meta b{color:var(--ink); font-weight:500;}
+  .cover-rule{border:0; border-top:1px solid var(--hairline-dark); margin:68px auto 0;}
 
   /* ── 章节 ── */
-  section{margin:0 0 84px;}
+  section{margin:0 0 92px;}
   section > h2{
-    font-family:"Playfair Display","Noto Serif SC","Songti SC",STSong,serif;
-    font-size:25px; font-weight:600; letter-spacing:.03em;
-    margin:0 0 30px; padding-top:34px; position:relative;
+    font-size:22px; font-weight:600; letter-spacing:.08em;
+    margin:0 0 32px; padding-top:36px; position:relative;
   }
   section > h2::before{
     content:""; position:absolute; top:0; left:0;
-    width:34px; height:1px; background:var(--accent);
+    width:40px; height:2px; background:var(--accent);
   }
-  h3{
-    font-size:16px; font-weight:600; letter-spacing:.05em; margin:34px 0 12px;
-  }
+  h3{font-size:15.5px; font-weight:600; letter-spacing:.06em; margin:36px 0 12px;}
   p{margin:0 0 20px;}
   strong{font-weight:600;}
-  .lead{
-    font-family:"Playfair Display","Noto Serif SC","Songti SC",STSong,serif;
-    font-size:19px; line-height:1.9; color:#3a382f;
-  }
+  .lead{font-size:18px; line-height:2; color:#38352e; letter-spacing:.02em;}
 
-  /* ── 引言 / 金句：居中斜体衬线，Kinfolk 的招牌 ── */
-  .pullquote{
-    text-align:center; margin:56px 0; padding:44px 24px;
+  /* ── 数据大字报：Futura 的主场 ── */
+  .stat-strip{
+    display:grid; grid-template-columns:repeat(3,1fr); margin:44px 0;
     border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline);
   }
-  .pullquote p{
-    font-family:"Playfair Display","Noto Serif SC","Songti SC",STSong,serif;
-    font-size:21px; line-height:2; font-style:italic; margin:0; color:var(--ink);
+  .stat{padding:30px 12px; text-align:center;}
+  .stat + .stat{border-left:1px solid var(--hairline);}
+  .stat .num{
+    font-family:var(--en); font-size:42px; font-weight:500; letter-spacing:.02em;
+    line-height:1.1; color:var(--ink); display:block;
   }
+  .stat .num em{font-style:normal; color:var(--accent);}
+  .stat .lab{
+    display:block; margin-top:10px; font-family:var(--en); font-size:10.5px;
+    letter-spacing:.3em; text-transform:uppercase; color:var(--faint);
+  }
+
+  /* ── 金句 ── */
+  .pullquote{
+    text-align:center; margin:60px 0; padding:48px 24px;
+    border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline);
+  }
+  .pullquote p{font-size:20px; line-height:2.1; font-weight:500; letter-spacing:.05em; margin:0;}
   .pullquote .by{
-    display:block; margin-top:18px; font-style:normal; font-size:11px;
-    letter-spacing:.34em; text-transform:uppercase; color:var(--faint);
+    display:block; margin-top:20px; font-family:var(--en); font-size:10.5px;
+    letter-spacing:.4em; text-transform:uppercase; color:var(--accent);
   }
 
   /* ── 核心洞察 ── */
-  .callout{
-    margin:32px 0; padding:26px 30px; background:var(--panel);
-    border:1px solid var(--hairline);
-  }
+  .callout{margin:34px 0; padding:26px 30px; background:var(--panel); border:1px solid var(--hairline);}
   .callout .label{
-    font-size:11px; letter-spacing:.34em; text-transform:uppercase;
+    font-family:var(--en); font-size:10.5px; letter-spacing:.38em; text-transform:uppercase;
     color:var(--accent); margin-bottom:10px; font-weight:500;
   }
   .callout p{margin:0;}
 
-  /* ── 三栏小卡：细线分隔，无底色 ── */
-  .insight-grid{
-    display:grid; grid-template-columns:repeat(3,1fr); margin:36px 0;
-    border-top:1px solid var(--hairline);
-  }
-  .insight-card{
-    padding:24px 20px 8px; border-bottom:1px solid var(--hairline);
-  }
+  /* ── 三栏小卡 ── */
+  .insight-grid{display:grid; grid-template-columns:repeat(3,1fr); margin:38px 0; border-top:1px solid var(--hairline);}
+  .insight-card{padding:24px 20px 10px; border-bottom:1px solid var(--hairline);}
   .insight-card + .insight-card{border-left:1px solid var(--hairline);}
-  .insight-card b{
-    display:block; font-family:"Playfair Display","Noto Serif SC","Songti SC",serif;
-    font-size:16px; font-weight:600; margin-bottom:10px;
-  }
-  .insight-card p{font-size:13.5px; color:var(--muted); line-height:1.85;}
+  .insight-card b{display:block; font-size:15px; font-weight:600; margin-bottom:10px; letter-spacing:.04em;}
+  .insight-card p{font-size:13px; color:var(--muted); line-height:1.9;}
 
   /* ── 图表 / 画板 ── */
   .chart-card,.whiteboard{
-    margin:44px 0; padding:36px 28px 26px; background:var(--panel);
+    margin:46px 0; padding:38px 28px 26px; background:var(--panel);
     border:1px solid var(--hairline); text-align:center;
   }
   .chart-card svg,.whiteboard svg{max-width:100%; height:auto;}
   .cap{
-    margin-top:18px; font-size:12.5px; color:var(--faint); font-style:italic;
-    letter-spacing:.06em;
+    margin-top:20px; font-family:var(--en); font-size:11px; color:var(--faint);
+    letter-spacing:.26em; text-transform:uppercase;
   }
-  .cap::before{content:"— "; color:var(--hairline-dark);}
+  .cap::before{content:"fig. "; color:var(--accent);}
 
   /* ── 四象限 ── */
-  .matrix{
-    display:grid; grid-template-columns:1fr 1fr; margin:32px 0;
-    border:1px solid var(--hairline); background:var(--panel);
-  }
+  .matrix{display:grid; grid-template-columns:1fr 1fr; margin:34px 0; border:1px solid var(--hairline); background:var(--panel);}
   .matrix > div{padding:22px 24px; border-right:1px solid var(--hairline); border-bottom:1px solid var(--hairline); min-height:110px;}
   .matrix > div:nth-child(2n){border-right:0;}
   .matrix > div:nth-last-child(-n+2){border-bottom:0;}
   .matrix b{display:block; font-size:14px; margin-bottom:8px;}
-  .matrix p{font-size:13.5px; color:var(--muted); margin:0; line-height:1.8;}
+  .matrix p{font-size:13px; color:var(--muted); margin:0; line-height:1.85;}
 
   /* ── 时间线 ── */
-  .timeline{margin:32px 0;}
-  .timeline-item{
-    display:grid; grid-template-columns:110px 1fr; gap:24px;
-    padding:18px 4px; border-bottom:1px solid var(--hairline);
-  }
+  .timeline{margin:34px 0;}
+  .timeline-item{display:grid; grid-template-columns:112px 1fr; gap:24px; padding:18px 4px; border-bottom:1px solid var(--hairline);}
   .timeline-item:first-child{border-top:1px solid var(--hairline);}
-  .timeline-item time{
-    font-size:12px; letter-spacing:.2em; text-transform:uppercase;
-    color:var(--accent); padding-top:5px;
-  }
-  .timeline-item p{margin:0; font-size:15px;}
+  .timeline-item time{font-family:var(--en); font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--accent); padding-top:6px;}
+  .timeline-item p{margin:0; font-size:14.5px;}
 
-  /* ── 行动清单：编辑部风格的编号 ── */
-  ol.actions{list-style:none; counter-reset:a; padding:0; margin:32px 0;}
+  /* ── 行动清单 ── */
+  ol.actions{list-style:none; counter-reset:a; padding:0; margin:34px 0;}
   ol.actions li{
-    counter-increment:a; display:grid; grid-template-columns:56px 1fr; gap:20px;
+    counter-increment:a; display:grid; grid-template-columns:64px 1fr; gap:20px;
     padding:20px 4px; border-bottom:1px solid var(--hairline); align-items:baseline;
   }
   ol.actions li:first-child{border-top:1px solid var(--hairline);}
   ol.actions li::before{
-    content:"№ " counter(a);
-    font-family:"Playfair Display","Noto Serif SC",serif;
-    font-size:15px; font-style:italic; color:var(--accent);
+    content:counter(a,decimal-leading-zero);
+    font-family:var(--en); font-size:17px; font-weight:500; color:var(--accent); letter-spacing:.1em;
   }
 
-  /* ── 状态色（匹配度/风险，用文字色而非色块） ── */
   .ok{color:var(--ok);} .warn{color:var(--warn);} .bad{color:var(--bad);}
 
-  /* ── 脚注 / 免责声明 ── */
+  /* ── 页脚 ── */
   .footnote{
-    margin-top:96px; padding-top:28px; border-top:1px solid var(--hairline);
-    text-align:center; font-size:12.5px; color:var(--faint); line-height:2;
+    margin-top:100px; padding-top:30px; border-top:1px solid var(--hairline);
+    text-align:center; font-size:12px; color:var(--faint); line-height:2.1;
   }
   .footnote .fin{
-    display:block; margin-bottom:18px; font-family:"Playfair Display",serif;
-    font-size:14px; font-style:italic; color:var(--hairline-dark); letter-spacing:.3em;
+    display:block; margin-bottom:18px; font-family:var(--en); font-size:11px;
+    letter-spacing:.5em; text-transform:uppercase; color:var(--hairline-dark);
   }
 
   @media (max-width:640px){
-    h1{font-size:30px;}
-    .insight-grid{grid-template-columns:1fr;}
-    .insight-card + .insight-card{border-left:0;}
+    h1{font-size:27px;}
+    .stat-strip,.insight-grid{grid-template-columns:1fr;}
+    .stat + .stat,.insight-card + .insight-card{border-left:0;}
     .timeline-item,ol.actions li{grid-template-columns:1fr; gap:6px;}
   }
   @media print{
     body{background:#fff;}
     .page{max-width:none; padding:0 14mm;}
-    section,.chart-card,.callout,.pullquote{break-inside:avoid;}
+    .rise,.rule-grow{animation:none;}
+    section,.chart-card,.callout,.pullquote,.stat-strip{break-inside:avoid;}
   }
 </style>
 </head>
@@ -202,53 +192,57 @@
 <div class="page">
 
   <header class="cover">
-    <div class="kicker">Career Planning Journal · 职业规划</div>
-    <h1>{{TAGLINE}}</h1>
-    <p class="tagline">一份为你而写的职业规划——像一期只印一册的杂志</p>
-    <div class="meta">
+    <div class="kicker rise">Career Planning Journal</div>
+    <h1 class="rise" style="--d:.1s">{{TAGLINE}}</h1>
+    <p class="tagline rise" style="--d:.2s">一份为你而写的职业规划 · 像一期只印一册的杂志</p>
+    <div class="meta rise" style="--d:.3s">
       <span>For · <b>{{NAME}}</b></span>
       <span>Issue · <b>{{DATE}}</b></span>
     </div>
-    <hr class="cover-rule">
+    <hr class="cover-rule rule-grow" style="--d:.45s">
   </header>
 
   {{CONTENT}}
   <!-- CONTENT 结构示例（填充时删除本注释）：
 
-  <section>
+  <section class="rise" style="--d:.5s">
     <h2>一、我对你的判断</h2>
-    <p class="lead">……开篇判断，用衬线大字给它应有的分量……</p>
+    <p class="lead">……开篇判断……</p>
+    <div class="stat-strip">
+      <div class="stat"><span class="num"><em>160</em>%</span><span class="lab">Income vs Salary</span></div>
+      <div class="stat"><span class="num">3<em>+</em></span><span class="lab">Months Sustained</span></div>
+      <div class="stat"><span class="num">12<em>+</em></span><span class="lab">Months Runway</span></div>
+    </div>
     <div class="callout">
-      <div class="label">The Insight · 核心洞察</div>
+      <div class="label">The Insight</div>
       <p>那句最关键的话。</p>
     </div>
   </section>
 
-  <div class="pullquote">
+  <div class="pullquote rise">
     <p>"你站在金矿上，却以为自己在搬砖。"</p>
-    <span class="by">本期主题</span>
+    <span class="by">Theme of This Issue</span>
   </div>
 
   <section>
     <h2>二、核心分析</h2>
-    <p>……</p>
     <div class="chart-card">
-      （安全内联 SVG，配色用 :root 固定色）
-      <div class="cap">图一 · 你的能力甜区</div>
+      （安全内联 SVG，用 :root 固定色）
+      <div class="cap">01 · 能力甜区</div>
     </div>
   </section>
 
   <section>
     <h2>四、接下来 30 / 90 天</h2>
     <ol class="actions">
-      <li>第一件可以立刻动手的事。</li>
+      <li>第一件立刻能动手的事。</li>
       <li>第二件。</li>
     </ol>
   </section>
   -->
 
   <div class="footnote">
-    <span class="fin">· fin ·</span>
+    <span class="fin">· Fin ·</span>
     以上分析与建议仅供参考，不构成职业、法律、投资等任何方面的直接指导；<br>
     所有选择的最终决定权始终在你自己手上。<br>
     由「职业规划导师」skill 生成
