@@ -26,8 +26,37 @@
 
 - **刚入职场 / 迷茫**：从兴趣出发挖掘能力点，找到值得走的方向。
 - **想越走越高**：怎么打造"人无我有"的核心竞争力？感觉到顶了怎么突破天花板？怎么实现个人价值？
-- **手里有机会要抉择**：两个 offer 怎么选？大厂还是创业？这个岗位适不适合我？跳还是留？
+- **手里有机会要抉择**：两个 offer 怎么选？大厂还是创业？这个岗位适不适合我？该不该入职？该不该离职？
 - **怕被裁 / 组织变化 / 行业下行**：怎么让自己反脆弱、越老越值钱？怎么找到一份能长期甚至终身做的事？
+
+---
+
+## 什么时候会触发
+
+你不一定要说"使用这个 skill"。只要问题涉及职业方向、岗位选择、公司选择、入职/离职/跳槽、职业安全感，它都应该进入职业规划导师模式。
+
+典型触发句：
+
+```text
+帮我做职业规划
+我不知道自己适合做什么
+我该不该离职
+我要不要入职这家公司
+这个 offer 要不要接
+这个岗位适合我吗
+我该不该转行
+我怕被裁，怎么提高安全感
+怎么才能变得不可替代
+```
+
+---
+
+## 数据、格式与飞书
+
+- **真实数据优先**：你可以直接给它 JD、简历、薪资、offer 条款、公司信息、行业判断、面试反馈。它会基于你提供的数据分析，并标注哪些是"用户提供信息"。
+- **不编造实时数据**：涉及名人、公司、融资、估值、裁员、政策、股价、行业规模等会变化的信息，能联网就查公开来源；不能核实时必须说明"无法现场核实"，不能硬编数字。
+- **格式自动输出**：你说 HTML 就生成 HTML；说 Markdown 就给 Markdown；说 PDF 就先生成 HTML 再转/打印；说飞书/Lark 就优先创建飞书文档。
+- **飞书深度集成**：如果当前 Agent 有飞书能力或本地装了 `lark-cli`，可以把报告写到飞书文档；如果有 `lark-whiteboard`，关键图会优先做成飞书画板。
 
 ---
 
@@ -70,6 +99,25 @@ cp -r .claude/skills/career-planning ~/.codex/skills/
 
 Redskill 如果要求上传 skill 目录，请选择 `.claude/skills/career-planning/`，不要上传整个本地项目目录。GitHub 可以发布整个仓库，但发布前建议确认 `git status --ignored --short` 里只有 ignored 的个人档案、系统文件和本地设置。
 
+如果你已经安装 GitHub CLI，可以这样发布到 GitHub：
+
+```bash
+gh auth login
+git status --short --ignored
+git add README.md LICENSE .gitignore .claude/skills/career-planning
+git commit -m "Publish career planning skill"
+gh repo create career-planning-skill --public --source=. --remote=origin --push
+```
+
+如果 GitHub 上已经建好了仓库，就改用：
+
+```bash
+git remote add origin https://github.com/<你的用户名>/<仓库名>.git
+git push -u origin main
+```
+
+发布前确认不要提交 `职业档案/`、`.claude/settings.local.json`、`.DS_Store`、本地 zip/tar 包或任何用户真实简历/JD。
+
 ---
 
 ## 怎么用
@@ -95,6 +143,18 @@ Redskill 如果要求上传 skill 目录，请选择 `.claude/skills/career-plan
 你的个人职业档案默认存在项目下的 `职业档案/` 文件夹里，**已被 `.gitignore` 忽略**——你 fork、clone、push 这个仓库都不会泄露任何个人数据。第一次建档或同步飞书前，skill 会先征求你的同意。Skill 本体不含任何人的信息，每个人装上后各自生成自己的档案。
 
 发布到 Redskill / GitHub 时，请只发布被 Git 跟踪的 skill 文件，不要手动把整个本地目录打包上传；本地可能包含 `职业档案/`、`.claude/settings.local.json`、`.DS_Store` 这类隐私或系统文件。需要压缩包时，建议先从 Git 生成干净发布包，而不是直接右键压缩当前文件夹。
+
+---
+
+## 发布前检查清单
+
+- `SKILL.md` 的 `description` 覆盖"职业规划 / 入职 / 离职 / offer / JD / 转行 / 被裁 / 行业下行"等触发词。
+- 没有专用工具时，选择题、图表、文件保存、飞书、PDF 都能降级。
+- HTML 模板不依赖外部图片或脚本，用户输入会先转义。
+- 涉及实时信息时不编造；无法核实时明确说明。
+- 每份完整规划和导出报告都有免责声明。
+- `git status --ignored --short` 里没有要被误提交的隐私文件。
+- 压缩包或 GitHub 仓库根目录能让人直接找到 `.claude/skills/career-planning/SKILL.md`。
 
 ---
 
