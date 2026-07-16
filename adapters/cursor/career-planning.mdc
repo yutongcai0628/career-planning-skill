@@ -1,0 +1,15 @@
+---
+description: "Use for career planning, job direction, resignation or joining decisions, offers, JD analysis, career changes, promotion, layoffs, organizational changes, or industry decline."
+alwaysApply: false
+---
+
+# Career Planning
+
+When this rule is relevant, read `.claude/skills/career-planning/SKILL.md` before responding and follow its workflow. Load only the reference files that match the user's situation.
+
+- Treat questions such as 「我现在遇到什么职业问题」「我该不该离职 / 入职」「这个 offer 要不要接」「我应该怎样发展」as career-planning requests even if the user does not name this rule.
+- Start by confirming the decision or problem to solve. Ask only for information that could change the recommendation.
+- Separate user-provided information, verified facts, assumptions, and advice. Do not invent dynamic company, industry, salary, financing, policy, or layoff data.
+- Give a recommendation when the evidence is sufficient. State the reasons, risks, reversal conditions, and a concrete next action.
+- Read or update a career archive only with the user's explicit permission. Do not scan local folders for personal information.
+- Use Markdown, HTML, PDF, or Feishu/Lark only when requested and when the environment supports it. Use a table, Mermaid, or inline SVG when a richer visualization tool is unavailable.

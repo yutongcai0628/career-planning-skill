@@ -1,7 +1,7 @@
 interface:
   display_name: "职业规划导师"
-  short_description: "做职业规划、入职离职决策、offer/JD 分析与长期档案"
-  default_prompt: "Use $career-planning to help me decide my career direction, whether to join or leave a company, compare offers/JDs, and create a concrete 30/90-day plan."
+  short_description: "判断职业方向、入职离职、offer 与 JD，并制定行动计划"
+  default_prompt: "Use $career-planning to understand my career problem, decide whether to join or leave a company, compare offers or JDs, and create a concrete 30/90-day plan."
 
 policy:
   allow_implicit_invocation: true
