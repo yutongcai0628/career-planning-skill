@@ -176,6 +176,38 @@ class ReleaseTests(unittest.TestCase):
         for exclusion in ["周报", "润色文案", "技术任务", "通用管理知识"]:
             self.assertIn(exclusion, frontmatter)
 
+    def test_public_readme_excludes_maintainer_notes(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        maintainer_only = [
+            "发布前检查",
+            "build_release.py",
+            "source_dirty",
+            "host-validation",
+            "公开发布前的独立测试",
+            "不会要求用户提交邮箱",
+        ]
+        for phrase in maintainer_only:
+            self.assertNotIn(phrase, readme)
+        self.assertIn("请开启一个新会话", readme)
+
+    def test_packaged_references_exclude_release_process_notes(self) -> None:
+        quality = (SKILL / "references" / "决策协议与质量门槛.md").read_text(encoding="utf-8")
+        self.assertNotIn("公开发布前的独立测试", quality)
+        self.assertNotIn("大改 Skill 后", quality)
+
+    def test_long_references_have_a_table_of_contents(self) -> None:
+        for path in sorted((SKILL / "references").glob("*.md")):
+            document = path.read_text(encoding="utf-8")
+            if len(document.splitlines()) > 100:
+                self.assertIn("## 目录", "\n".join(document.splitlines()[:30]), path.name)
+
+    def test_cross_host_records_are_explicitly_optional(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "release-check.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Validate optional cross-host result schema", workflow)
+        self.assertNotIn("--require-all", workflow)
+
     def test_state_updates_preserve_notes_and_append_history(self) -> None:
         original = complete_fields()
         original["USER_NOTES"] = "<p>用户原文：不要删除。</p>"
