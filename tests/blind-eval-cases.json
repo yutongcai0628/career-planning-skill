@@ -17,7 +17,7 @@
       "id": "trigger-graduate-interest",
       "should_trigger": true,
       "prompt": "我是艺术管理应届研究生，自媒体有一万粉丝，想进互联网大厂，但不知道自己真正擅长什么。",
-      "checks": ["把粉丝量拆成任务和结果证据", "探索愿意长期重复的工作", "映射具体岗位日常", "不只推荐内容运营"]
+      "checks": ["先用 1–3 道选择题补经历证据、任务偏好和约束", "把粉丝量拆成任务和结果证据", "探索愿意长期重复的工作", "映射具体岗位日常", "回答后自动生成 HTML"]
     },
     {
       "id": "trigger-offer-comparison",
@@ -83,13 +83,13 @@
       "id": "storage-choice-feishu-connected",
       "should_trigger": true,
       "prompt": "帮我做完整职业规划。我已经连好了飞书 CLI，也希望以后能继续更新档案。",
-      "checks": ["检查飞书文档工具可调用且授权有效", "提供本地 HTML、飞书文档和只做本次三个选项", "选择飞书时不额外生成 HTML", "不把只安装 CLI 当成已经连接"]
+      "checks": ["检查飞书文档工具可调用且授权有效", "把本地 HTML 与飞书文档作为格式选择题", "选择飞书时不额外生成 HTML", "不把只安装 CLI 当成已经连接"]
     },
     {
       "id": "storage-choice-feishu-unavailable",
       "should_trigger": true,
       "prompt": "帮我建立持续职业档案，但当前环境没有飞书工具。",
-      "checks": ["只提供本地 HTML 和只做本次", "不展示不可用的飞书选项", "不声称可以同步飞书"]
+      "checks": ["不询问报告格式", "回答后自动生成本地 HTML", "不展示不可用的飞书选项", "不声称可以同步飞书"]
     }
   ]
 }

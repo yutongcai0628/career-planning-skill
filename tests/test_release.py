@@ -331,20 +331,27 @@ class ReleaseTests(unittest.TestCase):
             self.assertIn(phrase, skill + lens)
         self.assertIn("报告保持离线", skill)
 
-    def test_archive_choice_is_gated_by_feishu_capability(self) -> None:
+    def test_full_plan_auto_generates_html_and_feishu_choice_is_gated(self) -> None:
         skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
         archive = (SKILL / "references" / "持续档案.md").read_text(encoding="utf-8")
+        interaction = (SKILL / "references" / "交互与可视化.md").read_text(encoding="utf-8")
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         adapter = (ROOT / "adapters" / "cursor" / "career-planning.mdc").read_text(encoding="utf-8")
-        combined = "\n".join([skill, archive, readme, adapter])
+        combined = "\n".join([skill, archive, interaction, readme, adapter])
         for phrase in [
             "文档能力可调用且授权有效",
-            "A 本地 HTML B 飞书文档 C 只做本次",
-            "A 本地 HTML B 只做本次",
+            "A 本地 HTML B 飞书文档",
+            "默认生成本地 HTML",
+            "信息不足时先问 1–3",
+            "回答后自动生成",
+            "飞书不可用时不询问格式",
+            "用户明确拒绝保存",
             "不要未经同意自动改换存储位置",
             "用户明确要求“两种都要”",
         ]:
             self.assertIn(phrase, combined)
+        self.assertNotIn("A 本地 HTML B 飞书文档 C 只做本次", combined)
+        self.assertNotIn("A 本地 HTML B 只做本次", combined)
         self.assertNotIn("HTML + 飞书同步", combined)
 
     def test_blind_eval_suite_has_trigger_and_non_trigger_cases(self) -> None:

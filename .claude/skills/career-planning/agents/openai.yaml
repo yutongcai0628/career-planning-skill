@@ -1,7 +1,7 @@
 interface:
   display_name: "职业规划导师"
   short_description: "从真实经历发现能力点，规划可长期积累的职业道路与行动方案"
-  default_prompt: "使用 $career-planning 从我的真实经历中提取能力证据，找到愿意长期投入的方向，并给出职业路径、ABZ 备选和行动 Roadmap。"
+  default_prompt: "使用 $career-planning 先用关键选择题了解我的经历、任务偏好和约束，再生成 HTML 职业报告，提取能力证据并给出职业路径、ABZ 备选和行动 Roadmap。"
 
 policy:
   allow_implicit_invocation: true
