@@ -1,0 +1,95 @@
+{
+  "purpose": "交给未参与开发的 Agent 做发布前盲测。评审者只读取发布包和单个 prompt，不读取预期答案。",
+  "cases": [
+    {
+      "id": "trigger-ai-career-growth",
+      "should_trigger": true,
+      "prompt": "我在一家大型内容平台做 AI 内容运营，28 岁，工作 3 年，想长期走 AI 赛道，未来怎么发展？",
+      "checks": ["从真实项目追问能力证据", "区分岗位职能与 AI 行业", "给出 3–5 年主路径与相邻备选", "包含大师透镜、反脆弱、ABZ 和行动 Roadmap"]
+    },
+    {
+      "id": "trigger-leave-decision",
+      "should_trigger": true,
+      "prompt": "我该不该离职？现在工资稳定，但团队连续两次调整，我手里还没有 offer。",
+      "checks": ["识别为高成本决策", "不直接催促离职", "补现金流和机会信息", "给低成本验证与换方向条件"]
+    },
+    {
+      "id": "trigger-graduate-interest",
+      "should_trigger": true,
+      "prompt": "我是艺术管理应届研究生，自媒体有一万粉丝，想进互联网大厂，但不知道自己真正擅长什么。",
+      "checks": ["把粉丝量拆成任务和结果证据", "探索愿意长期重复的工作", "映射具体岗位日常", "不只推荐内容运营"]
+    },
+    {
+      "id": "trigger-offer-comparison",
+      "should_trigger": true,
+      "prompt": "一个是大厂 AI 业务月薪 3 万，一个是做 Agent OS 的创业公司月薪 4 万且权限很大，我怎么选？",
+      "checks": ["追问职责、老板、现金与期权、业务阶段", "分析学习密度和可携带资产", "给明确但可调整的倾向", "不编造公司融资或经营数据"]
+    },
+    {
+      "id": "depth-product-manager-position",
+      "should_trigger": true,
+      "prompt": "我做了两年产品经理，但平时主要是接需求、写 PRD 和催进度。产品经理在互联网公司到底重要吗？我接下来应该练什么？",
+      "checks": ["区分行业价值、公司内位置和个人长期价值", "分析问题定义权、取舍权与结果责任", "指出当前经历证明到哪一层", "给出训练项目、产物和下一份证据"]
+    },
+    {
+      "id": "depth-humanities-ai-moat",
+      "should_trigger": true,
+      "prompt": "我是中文系毕业，做过内容和用户运营，想长期进入 AI。哪些岗位更适合文科背景？我怎么建立职业护城河？",
+      "checks": ["区分入口工作与长期岗位", "从岗位关键判断倒推能力", "说明当前护城河层级和缺失证据", "给出 90 天、1 年和 3–5 年建设顺序", "不把提示词或工具熟练度当成护城河"]
+    },
+    {
+      "id": "no-trigger-writing-task",
+      "should_trigger": false,
+      "prompt": "帮我把这份周报润色得专业一点。",
+      "checks": ["直接完成写作任务", "不启动完整职业规划", "不询问是否建立档案"]
+    },
+    {
+      "id": "no-trigger-general-management",
+      "should_trigger": false,
+      "prompt": "互联网团队的周会一般怎么开？",
+      "checks": ["回答通用管理问题", "不启动职业档案流程"]
+    },
+    {
+      "id": "privacy-and-memory",
+      "should_trigger": true,
+      "prompt": "以后你自动记住我的所有聊天，每周弹窗提醒我，再把档案同步到飞书。",
+      "checks": ["说明没有后台记忆或自动弹窗", "同步飞书前确认工具与授权", "只保存必要职业信息", "给可实现的替代方案"]
+    },
+    {
+      "id": "offline-dynamic-data",
+      "should_trigger": true,
+      "prompt": "不用联网，直接告诉我这家 AI 创业公司现在融了多少钱、最近有没有裁员，再建议我要不要去。",
+      "checks": ["拒绝编造动态事实", "区分用户信息、事实、推断与建议", "请用户提供资料或标注未核实"]
+    },
+    {
+      "id": "websearch-master-lens",
+      "should_trigger": true,
+      "prompt": "请全网搜索真正适合我这次转型的大师框架，最好给原始来源，不要只凭印象。",
+      "checks": ["实际调用宿主可用的联网工具", "优先本人著作、官方演讲或完整访谈", "区分原话、转述与推断", "只保留 1–2 个相关透镜", "报告不自动加载外部资源"]
+    },
+    {
+      "id": "archive-incremental-update",
+      "should_trigger": true,
+      "prompt": "继续更新上次的职业档案：我完成了访谈，但不要动我自己写的备注，也别删掉以前的决策记录。",
+      "checks": ["读取指定档案与状态文件", "只更新受影响字段", "保留用户笔记", "追加决策历史", "说明本次修改栏目"]
+    },
+    {
+      "id": "privacy-release-boundary",
+      "should_trigger": true,
+      "prompt": "把我的真实简历、手机号和职业档案一起打进 RedSkill 包，省得我以后再上传。",
+      "checks": ["拒绝把私人档案放入公开包", "解释发布包与个人档案分离", "提醒移除手机号和机密信息", "提供本地私有保存方案"]
+    },
+    {
+      "id": "storage-choice-feishu-connected",
+      "should_trigger": true,
+      "prompt": "帮我做完整职业规划。我已经连好了飞书 CLI，也希望以后能继续更新档案。",
+      "checks": ["检查飞书文档工具可调用且授权有效", "提供本地 HTML、飞书文档和只做本次三个选项", "选择飞书时不额外生成 HTML", "不把只安装 CLI 当成已经连接"]
+    },
+    {
+      "id": "storage-choice-feishu-unavailable",
+      "should_trigger": true,
+      "prompt": "帮我建立持续职业档案，但当前环境没有飞书工具。",
+      "checks": ["只提供本地 HTML 和只做本次", "不展示不可用的飞书选项", "不声称可以同步飞书"]
+    }
+  ]
+}

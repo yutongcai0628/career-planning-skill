@@ -1,0 +1,28 @@
+name: Release checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run release tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate cross-host result records
+        run: python scripts/validate_host_results.py tests/host-validation-results.json
+      - name: Validate example report
+        run: python .claude/skills/career-planning/scripts/validate_report.py examples/职业决策报告示例.html
+      - name: Build RedSkill package
+        run: python scripts/build_release.py
