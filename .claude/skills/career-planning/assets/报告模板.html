@@ -789,7 +789,16 @@
     .report-header { min-height: 0; padding: 39px 24px 0; }
     .report-header::before { right: 13px; }
     .report-type { margin-bottom: 42px; font-size: 11px; }
-    .report-header h1 { font-size: 39px; line-height: 1.22; }
+    .report-header h1 {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      font-size: clamp(31px, 9vw, 39px);
+      line-height: 1.22;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-all;
+    }
     .cover-topic { font-size: 12px; }
     .summary { margin: 21px 0 34px; font-size: 17px; }
     .cover-meta { gap: 14px; font-size: 11px; }

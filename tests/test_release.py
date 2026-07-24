@@ -144,6 +144,20 @@ class ReleaseTests(unittest.TestCase):
         self.assertIsNotNone(title_rule)
         self.assertIn("overflow-wrap: anywhere", title_rule.group("body"))
         self.assertIn("word-break: break-word", title_rule.group("body"))
+        mobile_title_rules = re.findall(
+            r"\.report-header h1\s*\{(?P<body>.*?)\}", template, re.DOTALL
+        )
+        self.assertGreaterEqual(len(mobile_title_rules), 2)
+        mobile_title_rule = mobile_title_rules[-1]
+        for phrase in [
+            "width: 100%",
+            "max-width: 100%",
+            "min-width: 0",
+            "font-size: clamp(31px, 9vw, 39px)",
+            "white-space: normal",
+            "word-break: break-all",
+        ]:
+            self.assertIn(phrase, mobile_title_rule)
         self.assertIn("white-space: pre-line", template)
         self.assertIn("@media (max-width: 680px)", template)
         self.assertIn("@media (prefers-reduced-motion: reduce)", template)
