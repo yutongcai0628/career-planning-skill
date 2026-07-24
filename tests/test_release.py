@@ -212,6 +212,29 @@ class ReleaseTests(unittest.TestCase):
         self.assertIn("Validate optional cross-host result schema", workflow)
         self.assertNotIn("--require-all", workflow)
 
+    def test_public_install_docs_cover_shared_multi_host_install(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        for phrase in [
+            "npx skills add",
+            "https://github.com/yutongcai0628/career-planning-skill",
+            "--skill career-planning",
+            "-a claude-code -a codex -a cursor -a kimi-code-cli",
+            "~/.claude/skills/career-planning/",
+            "~/.codex/skills/career-planning/",
+            "~/.cursor/skills/career-planning/",
+            "~/.kimi-code/skills/career-planning/",
+        ]:
+            self.assertIn(phrase, readme)
+
+    def test_github_actions_are_pinned_to_full_commit_shas(self) -> None:
+        workflow = (ROOT / ".github" / "workflows" / "release-check.yml").read_text(
+            encoding="utf-8"
+        )
+        uses = re.findall(r"^\s*-\s+uses:\s+([^\s#]+)", workflow, re.MULTILINE)
+        self.assertTrue(uses)
+        for action in uses:
+            self.assertRegex(action, r"^[^@]+@[0-9a-f]{40}$")
+
     def test_state_updates_preserve_notes_and_append_history(self) -> None:
         original = complete_fields()
         original["USER_NOTES"] = "<p>用户原文：不要删除。</p>"
@@ -331,9 +354,24 @@ class ReleaseTests(unittest.TestCase):
     def test_master_lens_preserves_verified_web_search(self) -> None:
         skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
         lens = (SKILL / "references" / "标杆与思维透镜.md").read_text(encoding="utf-8")
-        for phrase in ["Web Search", "一手材料", "访问日期", "本次未完成联网核验"]:
-            self.assertIn(phrase, skill + lens)
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        adapter = (ROOT / "adapters" / "cursor" / "career-planning.mdc").read_text(
+            encoding="utf-8"
+        )
+        combined = "\n".join([skill, lens, readme, adapter])
+        for phrase in [
+            "Web Search",
+            "一手材料",
+            "访问日期",
+            "本次未完成联网核验",
+            "去身份化",
+            "完整简历",
+            "私人职业档案",
+            "未公开雇主",
+        ]:
+            self.assertIn(phrase, combined)
         self.assertIn("报告保持离线", skill)
+        self.assertNotIn("全网搜索", combined)
 
     def test_full_plan_auto_generates_html_and_feishu_choice_is_gated(self) -> None:
         skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
