@@ -244,6 +244,7 @@ class ReleaseTests(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "release-check.yml").read_text(
             encoding="utf-8"
         )
+        self.assertIn('PYTHONDONTWRITEBYTECODE: "1"', workflow)
         uses = re.findall(r"^\s*-\s+uses:\s+([^\s#]+)", workflow, re.MULTILINE)
         self.assertTrue(uses)
         for action in uses:
@@ -330,6 +331,21 @@ class ReleaseTests(unittest.TestCase):
                 path = source / relative
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text("placeholder", encoding="utf-8")
+
+            bytecode = source / "scripts" / "__pycache__" / "render_report.cpython-312.pyc"
+            bytecode.parent.mkdir()
+            bytecode.write_bytes(b"generated cache")
+            public_files = builder.validate_source(source)
+            self.assertEqual(
+                set(builder.PUBLIC_FILES),
+                {str(path.relative_to(source)) for path in public_files},
+            )
+
+            unreviewed_cache_file = bytecode.parent / "notes.txt"
+            unreviewed_cache_file.write_text("not a Python bytecode cache", encoding="utf-8")
+            with self.assertRaises(SystemExit):
+                builder.validate_source(source)
+
             private_report = source / "职业档案" / "真实用户.html"
             private_report.parent.mkdir()
             private_report.write_text("private", encoding="utf-8")

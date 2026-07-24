@@ -23,6 +23,7 @@ DEFAULT_RELEASE = ROOT / "release"
 PACKAGE_NAME = "career-planning"
 MAX_FILE_BYTES = 10 * 1024 * 1024
 MAX_TOTAL_BYTES = 30 * 1024 * 1024
+PYTHON_CACHE_SUFFIXES = {".pyc", ".pyo"}
 
 # A public package is assembled from this exact list. New files fail the build
 # until a maintainer explicitly reviews and adds them here.
@@ -87,6 +88,11 @@ def validate_source(source: Path = SOURCE) -> list[Path]:
         if path.is_symlink():
             unsafe_nodes.append(f"symbolic link: {relative}")
         elif path.is_file():
+            # Python may create bytecode while tests import or execute bundled
+            # scripts. These cache files are transient build artifacts and are
+            # never eligible for the public package.
+            if "__pycache__" in relative.parts and relative.suffix in PYTHON_CACHE_SUFFIXES:
+                continue
             actual.add(relative)
         elif not path.is_dir():
             unsafe_nodes.append(f"unsupported filesystem node: {relative}")
