@@ -203,6 +203,10 @@ class ReleaseTests(unittest.TestCase):
             "host-validation",
             "公开发布前的独立测试",
             "不会要求用户提交邮箱",
+            "与女娲 Skill 等公开项目相同",
+            "从尚未公开的本地文件夹安装",
+            "上传 `career-planning-redskill-<版本>.zip`",
+            "运行第三方安装器前应先查看其来源和权限",
         ]
         for phrase in maintainer_only:
             self.assertNotIn(phrase, readme)
@@ -233,6 +237,7 @@ class ReleaseTests(unittest.TestCase):
             "https://github.com/yutongcai0628/career-planning-skill",
             "--skill career-planning",
             "-a claude-code -a codex -a cursor -a kimi-code-cli",
+            ".claude/skills/career-planning/",
             "~/.claude/skills/career-planning/",
             "~/.codex/skills/career-planning/",
             "~/.cursor/skills/career-planning/",
