@@ -104,70 +104,35 @@ HTML 是完整职业规划的默认交付物，可以直接用浏览器打开，
 
 ## 安装
 
-请导入完整的 `career-planning/` 文件夹，不要只复制 `SKILL.md`。完整目录还包含分析方法、报告模板和生成脚本。
+安装时请保留完整的 Skill 目录，不要只复制 `SKILL.md`。其中的 `references/`、`assets/` 和 `scripts/` 是职业分析与 HTML 报告生成所必需的。
 
-### 一行安装到多个 Agent
+### 使用 Skills CLI
 
-本仓库遵循开放的 [Agent Skills 规范](https://agentskills.io)。与女娲 Skill 等公开项目相同，推荐使用 [Vercel `skills` CLI](https://github.com/vercel-labs/skills) 把同一份 Skill 安装到不同宿主，不需要维护四套副本。
-
-从 GitHub 安装：
+运行下面的命令，并按提示选择要安装到的 Agent：
 
 ```bash
 npx skills add https://github.com/yutongcai0628/career-planning-skill --skill career-planning
 ```
 
-安装器会让你选择已检测到的 Agent。也可以一次明确指定四个宿主：
+也可以一次安装到 Claude Code、Codex、Cursor 和 Kimi Code：
 
 ```bash
 npx skills add https://github.com/yutongcai0628/career-planning-skill --skill career-planning \
   -a claude-code -a codex -a cursor -a kimi-code-cli
 ```
 
-从尚未公开的本地文件夹安装时，解压后在该目录的上一层运行：
+### 手动安装
 
-```bash
-npx skills add ./职场规划skill --skill career-planning
-```
+下载本仓库后，将 `.claude/skills/career-planning/` 整个文件夹复制到对应位置：
 
-运行第三方安装器前应先查看其来源和权限；不想使用 Node.js 或安装器时，按下面的路径手动复制即可。
+| Agent | 安装位置 |
+|---|---|
+| Claude Code | `~/.claude/skills/career-planning/` |
+| Codex | `~/.codex/skills/career-planning/` |
+| Cursor | `~/.cursor/skills/career-planning/` |
+| Kimi Code | `~/.kimi-code/skills/career-planning/` |
 
-### RedSkill
-
-在 RedSkill 中上传 `career-planning-redskill-<版本>.zip`，或按平台提示导入完整的 `career-planning/` 文件夹。
-
-### Claude Code
-
-将 `career-planning/` 复制到：
-
-```text
-~/.claude/skills/career-planning/
-```
-
-### Codex
-
-将 `career-planning/` 复制到：
-
-```text
-~/.codex/skills/career-planning/
-```
-
-### Cursor
-
-将 `career-planning/` 复制到：
-
-```text
-~/.cursor/skills/career-planning/
-```
-
-### Kimi Code
-
-将 `career-planning/` 复制到：
-
-```text
-~/.kimi-code/skills/career-planning/
-```
-
-其他兼容 Agent Skills 的平台，请按平台规则导入整个文件夹，并确保 Agent 可以读取其中的 `references/`、`assets/` 和 `scripts/`。
+其他兼容 [Agent Skills](https://agentskills.io) 的平台，请按平台说明导入同一个完整文件夹。
 
 复制完成后请开启一个新会话。如果 Agent 没有识别到 Skill，请重启当前 Agent 后再试。
 
