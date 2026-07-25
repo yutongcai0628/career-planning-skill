@@ -1,8 +1,6 @@
 # 职业规划 Skill
 <img width="924" height="470" alt="career-planning-skill" src="https://github.com/user-attachments/assets/9f2664e1-eefb-41fd-8686-3d0965e31d41" />
 
-从你过去真实的学习和工作经历出发，挖掘你的能力点，选择一条可以长期探索的职业道路✨
-
 这是一个面向 Claude Code、Codex、Kimi、Cursor Agent 及其他兼容 Agent Skills 的职业规划 Skill。
 它适合处理职业迷茫、转岗转行、离职与 offer 决策、能力提炼、长期发展和职业风险等问题。
 
