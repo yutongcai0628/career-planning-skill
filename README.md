@@ -1,4 +1,4 @@
-# 职业规划导师
+# 职业规划 Skill
 <img width="924" height="470" alt="career-planning-skill" src="https://github.com/user-attachments/assets/9f2664e1-eefb-41fd-8686-3d0965e31d41" />
 
 从你过去真实的学习和工作经历出发，挖掘你的能力点，选择一条可以长期探索的职业道路✨
