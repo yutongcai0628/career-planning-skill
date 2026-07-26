@@ -408,7 +408,7 @@ class ReleaseTests(unittest.TestCase):
         self.assertIn("报告保持离线", skill)
         self.assertNotIn("全网搜索", combined)
 
-    def test_full_plan_asks_about_feishu_and_requires_a_verified_whiteboard(self) -> None:
+    def test_full_plan_asks_about_feishu_and_requires_structured_verified_whiteboards(self) -> None:
         skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
         archive = (SKILL / "references" / "持续档案.md").read_text(encoding="utf-8")
         export = (SKILL / "references" / "导出报告.md").read_text(encoding="utf-8")
@@ -423,11 +423,17 @@ class ReleaseTests(unittest.TestCase):
             "lark-cli auth status --json --verify",
             "CLI/文档能力可调用且用户身份授权有效",
             "A 本地 HTML B 飞书文档",
-            "至少一张已填充的主画板",
+            "统一使用 `1.` 到 `8.` 的章节编号",
+            "每段最多三句",
+            "原生 `<ol>/<ul>`",
+            "首次完整飞书档案必须包含 2–3 张已填充画板",
+            "至少两张分别解释不同关系",
             "`lark-doc` 与 `lark-whiteboard`",
             "whiteboard +export --output-type preview",
+            "docs +fetch --api-version v2 --detail with-ids",
             "不保留空白画板",
             "不要把纯文字飞书文档声称为完整交付",
+            "少于两张有效画板",
             "信息不足时再问 1–3",
             "用户回答没有或不确定时不再问格式",
             "用户明确拒绝保存",
@@ -437,6 +443,8 @@ class ReleaseTests(unittest.TestCase):
             self.assertIn(phrase, combined)
         self.assertNotIn("不询问用户是否安装 CLI", combined)
         self.assertNotIn("失败时退回文档表格", combined)
+        self.assertNotIn("默认只维护一张主画板", combined)
+        self.assertNotIn("飞书正文和至少一张已填充的主画板", combined)
         self.assertNotIn("A 本地 HTML B 飞书文档 C 只做本次", combined)
         self.assertNotIn("A 本地 HTML B 只做本次", combined)
         self.assertNotIn("HTML + 飞书同步", combined)
