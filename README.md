@@ -145,7 +145,8 @@ npx skills add https://github.com/yutongcai0628/career-planning-skill --skill ca
 使用 career-planning skill 帮我做一次职业规划。
 ```
 
-### 关于作者
+## 关于作者
+
 我是yutong，中央美术学院艺术管理系研究生，ex-Dewu-Alibaba-Kering Integrated Marekting
 
 现AI Startup Branding & Growth Leader
