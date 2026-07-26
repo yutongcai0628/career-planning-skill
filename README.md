@@ -2,6 +2,7 @@
 <img width="1622" height="896" alt="career-planning-skill" src="https://github.com/user-attachments/assets/1012e93a-25bf-4293-9343-dbfb1bdf5e31" />
 
 这是一个面向 Claude Code、Codex、Kimi、Cursor Agent 及其他兼容 Agent Skills 的职业规划 Skill。
+
 它适合处理职业迷茫、转岗转行、离职与 offer 决策、能力提炼、长期发展和职业风险等问题。
 
 ## 它能帮你做什么🤔
@@ -18,7 +19,7 @@
 你可以直接问：
 
 ```text
-我对工作和未来很迷茫，不知道自己真正擅长什么。
+我对工作和未来很迷茫，不知道自己真正擅长什么，该把什么当成长期发展的方向。
 
 我该不该离职？我在现在公司待了 18 个月，手里有一个新 offer。
 
@@ -28,8 +29,8 @@
 
 继续我的职业档案：我完成了上次的行动计划，也遇到了一个新问题。
 ```
-
-不需要一次性交代完整背景。可以先说当前问题，也可以提供简历片段、JD、offer 条款、薪资结构、面试反馈或自己整理的数据。Skill 会先确认你是否有飞书 CLI；信息不足时，再用 1–3 道选择题确认那些可能改变结论的信息。你回答后，它会生成所选格式的完整报告。
+- 不需要一次性交代完整背景。可以先说当前问题，也可以提供简历片段、JD、offer 条款、薪资结构、面试反馈或自己整理的数据。
+- 信息不足时，再用 1–3 道选择题确认那些可能改变结论的信息。你回答后，它会生成所选格式的完整报告。
 
 ## 它怎样形成建议💡
 
@@ -37,7 +38,7 @@ Skill 不使用简单的性格标签、热门行业排行榜或随意打分替�
 
 1. 明确这次真正需要决定的问题。
 2. 区分用户提供的事实、公开资料、推断与未知信息。
-3. 从经历和结果中提炼能力证据与能力边界。
+3. 从经历和结果中提炼兴趣方向、能力证据与能力边界。
 4. 分析岗位怎样创造价值，以及未来 3–5 年可能发生的变化。
 5. 判断长期兴趣、现实约束与可携带的职业资产。
 6. 给出主路径、相邻路径和 ABZ 风险预案。
@@ -81,6 +82,8 @@ Skill 不使用简单的性格标签、热门行业排行榜或随意打分替�
 HTML 是完整职业规划的默认交付物，可以直接用浏览器打开，适合长期保存、打印或导出 PDF。报告打开时不会自动加载外部图片、脚本、字体、视频或追踪地址。
 
 飞书不可用时，Skill 会在当前工作区被忽略的 `职业档案/` 中自动生成 HTML 与配套状态文件，用于下次增量更新。它不会把整段聊天原样写入档案；用户明确说不要保存时只在对话中交付。
+
+<img width="967" height="887" alt="3f00d012d7cfc2d7c35c3096323ae2c3" src="https://github.com/user-attachments/assets/20b4cd47-b157-493d-be3b-852e3bd051ac" />
 
 ### 飞书文档
 
@@ -141,6 +144,17 @@ npx skills add https://github.com/yutongcai0628/career-planning-skill --skill ca
 ```text
 使用 career-planning skill 帮我做一次职业规划。
 ```
+
+### 关于作者
+我是yutong，中央美术学院艺术管理系研究生，ex-Dewu-Alibaba-Kering Integrated Marekting
+
+现AI Startup Branding & Growth Leader
+
+欢迎关注我👇
+
+小红书：https://www.xiaohongshu.com/user/profile/5a818ee911be106f9a18c511
+
+X：https://x.com/yutongCAI0628
 
 ## License
 
